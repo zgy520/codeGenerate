@@ -42,10 +42,44 @@ public class Product{
   private Long brandID;
   //varchar(50) 
   @NotNull
-  private String prodname;
+  private String prodName;
   //varchar(50) 
   private String specifications;
-  //以下是对应的实体关系  
+  //以下是对应的实体关系
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "brandID")
+  private Prodbrand  prodbrand;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "specID")
+  private Prodspec  prodspec;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "unitID")
+  private Produnit  produnit;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "modelID")
+  private Prodmodel  prodmodel;
+
+  @OneToMany(mappedBy = "product")
+  private Set<Productionorder>  productionorders = new HashSet<>();
+
+  @OneToMany(mappedBy = "product")
+  private Set<Proddeliveryorderdetail>  proddeliveryorderdetails = new HashSet<>();
+
+  @OneToMany(mappedBy = "product")
+  private Set<Prodgodownentrydetail>  prodgodownentrydetails = new HashSet<>();
+
+  @OneToMany(mappedBy = "product")
+  private Set<Salesorderdetail>  salesorderdetails = new HashSet<>();
+
+  @OneToMany(mappedBy = "product")
+  private Set<Inventorylog>  inventorylogs = new HashSet<>();
+
+  @OneToMany(mappedBy = "product")
+  private Set<Inventory>  inventorys = new HashSet<>();
+
   //关系实体创建完毕
 
 
@@ -100,12 +134,12 @@ public class Product{
 
 
   public void setProdName(String prodName){
-    this.prodname = prodName;
+    this.prodName = prodName;
   }
 
 
   public String getProdName(){
-    return this.prodname;
+    return this.prodName;
   }
 
 
@@ -117,4 +151,84 @@ public class Product{
   public String getSpecifications(){
     return this.specifications;
   }
+  public Prodbrand getProdbrand() {
+    return this.prodbrand;
+  }
+
+  public void setProdbrand(Prodbrand prodbrand) {
+    this.prodbrand = prodbrand;
+  }
+
+  public Prodspec getProdspec() {
+    return this.prodspec;
+  }
+
+  public void setProdspec(Prodspec prodspec) {
+    this.prodspec = prodspec;
+  }
+
+  public Produnit getProdunit() {
+    return this.produnit;
+  }
+
+  public void setProdunit(Produnit produnit) {
+    this.produnit = produnit;
+  }
+
+  public Prodmodel getProdmodel() {
+    return this.prodmodel;
+  }
+
+  public void setProdmodel(Prodmodel prodmodel) {
+    this.prodmodel = prodmodel;
+  }
+
+  public Set<Productionorder> getProductionorder() {
+    return this.productionorders;
+  }
+
+  public void setProductionorder(Set<Productionorder> productionorders) {
+    this.productionorders = productionorders;
+  }
+
+  public Set<Proddeliveryorderdetail> getProddeliveryorderdetail() {
+    return this.proddeliveryorderdetails;
+  }
+
+  public void setProddeliveryorderdetail(Set<Proddeliveryorderdetail> proddeliveryorderdetails) {
+    this.proddeliveryorderdetails = proddeliveryorderdetails;
+  }
+
+  public Set<Prodgodownentrydetail> getProdgodownentrydetail() {
+    return this.prodgodownentrydetails;
+  }
+
+  public void setProdgodownentrydetail(Set<Prodgodownentrydetail> prodgodownentrydetails) {
+    this.prodgodownentrydetails = prodgodownentrydetails;
+  }
+
+  public Set<Salesorderdetail> getSalesorderdetail() {
+    return this.salesorderdetails;
+  }
+
+  public void setSalesorderdetail(Set<Salesorderdetail> salesorderdetails) {
+    this.salesorderdetails = salesorderdetails;
+  }
+
+  public Set<Inventorylog> getInventorylog() {
+    return this.inventorylogs;
+  }
+
+  public void setInventorylog(Set<Inventorylog> inventorylogs) {
+    this.inventorylogs = inventorylogs;
+  }
+
+  public Set<Inventory> getInventory() {
+    return this.inventorys;
+  }
+
+  public void setInventory(Set<Inventory> inventorys) {
+    this.inventorys = inventorys;
+  }
+
 }

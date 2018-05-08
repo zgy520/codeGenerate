@@ -29,6 +29,8 @@ public class Manager{
   @GeneratedValue(strategy=GenerationType.IDENTITY)
   private Long recordID;
   //bigint(20) 
+  @NotNull
+  private Long employeeID;
   //bigint(20) 
   @NotNull
   private Long orgID;
@@ -54,6 +56,15 @@ public class Manager{
     return this.recordID;
   }
 
+
+  public void setEmployeeID(Long employeeID){
+    this.employeeID = employeeID;
+  }
+
+
+  public Long getEmployeeID(){
+    return this.employeeID;
+  }
 
 
   public void setOrgID(Long orgID){
@@ -84,4 +95,12 @@ public class Manager{
   public LocalDate getUntilDay(){
     return this.untilDay;
   }
+  public Employee getEmployee() {
+    return this.employee;
+  }
+
+  public void setEmployee(Employee employee) {
+    this.employee = employee;
+  }
+
 }

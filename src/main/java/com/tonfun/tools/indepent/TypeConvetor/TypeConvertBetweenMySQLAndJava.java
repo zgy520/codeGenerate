@@ -52,7 +52,7 @@ public class TypeConvertBetweenMySQLAndJava implements TypeConvert {
 			result = "LocalDate";
 		}else if (type.contains("float")) {
 			result = "float";
-		}else if (type.contains("decimal")) {
+		}else if (type.contains("decimal") || type.contains("double")) {
 			result = "double";
 		}else if (type.contains("time")) {
 			result = "LocalTime";

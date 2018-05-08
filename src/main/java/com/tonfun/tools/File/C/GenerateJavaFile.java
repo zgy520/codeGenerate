@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -52,12 +53,14 @@ import javassist.NotFoundException;
  * =======================================================================================*/
 public class GenerateJavaFile implements FileGeneratorInterface {
 	final TypeConvert typeConvert;
+	private Set<Table> tables;
 	/** ========================================================================================
 	 * 构造函数
 	 * =======================================================================================*/
-	public GenerateJavaFile() {
+	public GenerateJavaFile(Set<Table> tables) {
 		// TODO Auto-generated constructor stub
 		typeConvert = new TypeConvertBetweenMySQLAndJava();
+		this.tables = tables;
 	}
 
 	/** ========================================================================================
@@ -150,8 +153,9 @@ public class GenerateJavaFile implements FileGeneratorInterface {
 					}
 				});		
 		generateForeginContents(table, printWriter);
-		generateFieldMethods(columns, printWriter);  // 产生正常字段的get和set方法
-		//产生关系实体的get和set方法
+		generateFieldMethods(columns, printWriter);
+		// 产生关系实体的get和set方法
+		generateGetAndSetForRelationField(table, printWriter);
 	}
 	/**
 	 * ========================================================================================
@@ -167,20 +171,66 @@ public class GenerateJavaFile implements FileGeneratorInterface {
 		 * 添加多对一的关系
 		 */
 		foreginKeys.stream().forEach(foreginKey->{
-			printWriter.println("  @ManyToOne(fetch = FetchType.LAZY)");
-			printWriter.println("  @JoinColumn(name = \""+foreginKey.getColumnName()+"\")");
-			printWriter.println("  private "+Utils.captureName(foreginKey.getReferencedTableName())+
-					"  "+foreginKey.getReferencedTableName().toLowerCase()+";\r\n");			
+			if (this.countOfPrimaryKeys(foreginKey.getReferencedTableName()) && !foreginKey.getTableName().equals(foreginKey.getReferencedTableName())) {
+				printWriter.println("  @ManyToOne(fetch = FetchType.LAZY)");
+				printWriter.println("  @JoinColumn(name = \""+foreginKey.getColumnName()+"\")");
+				printWriter.println("  private "+Utils.captureName(foreginKey.getReferencedTableName())+
+						"  "+foreginKey.getReferencedTableName().toLowerCase()+";\r\n");
+			}		
 		});
 		/**
 		 * 添加一对多的关系
 		 */
 		table.getAniForeginKeys().stream().forEach(aniForeginKey->{
-			printWriter.println("  @OneToMany(mappedBy = \""+aniForeginKey.getReferencedTableName().toLowerCase()+"\")");				
-			printWriter.println("  private Set<"+Utils.captureName(aniForeginKey.getTableName())+
-					">  "+aniForeginKey.getTableName().toLowerCase()+"s = new HashSet<>();\r\n");
+			if (this.countOfPrimaryKeys(aniForeginKey.getTableName())) {
+				printWriter.println("  @OneToMany(mappedBy = \""+aniForeginKey.getReferencedTableName().toLowerCase()+"\")");				
+				printWriter.println("  private Set<"+Utils.captureName(aniForeginKey.getTableName())+
+						">  "+aniForeginKey.getTableName().toLowerCase()+"s = new HashSet<>();\r\n");
+			}
 		});
 		printWriter.println("  //关系实体创建完毕");
+	}
+	/**
+	 * 根据实体之间的关系产生关系字段的get和set方法
+	 * @param table
+	 * @param printWriter
+	 */
+	private void generateGetAndSetForRelationField(Table table,PrintWriter printWriter) {
+		table.getForeginKeys().stream().forEach(foreginKey->{
+			String className = Utils.captureName(foreginKey.getReferencedTableName());
+			if (!foreginKey.getTableName().equals(foreginKey.getReferencedTableName())) {  // 如果表明和应用的表明一样，则不做处理
+				/**
+				 * 填充get方法
+				 */
+				printWriter.println("  public "+className+" get"+className+"() {");
+				printWriter.println("    return this."+className.toLowerCase()+";");
+				printWriter.println("  }\r\n");
+				/**
+				 * 填充set方法
+				 */
+				printWriter.println("  public void set"+className+"("+className +" "+className.toLowerCase()+") {");
+				printWriter.println("    this."+className.toLowerCase()+" = "+className.toLowerCase()+";");
+				printWriter.println("  }\r\n");
+			}
+			
+		});
+		table.getAniForeginKeys().stream().forEach(aniForeginKey -> {
+			String className = Utils.captureName(aniForeginKey.getTableName());
+			if (this.countOfPrimaryKeys(aniForeginKey.getTableName())) {
+				/**
+				 * 填充get方法
+				 */
+				printWriter.println("  public Set<"+className+"> get"+className+"() {");
+				printWriter.println("    return this."+className.toLowerCase()+"s;");
+				printWriter.println("  }\r\n");
+				/**
+				 * 填充set方法
+				 */
+				printWriter.println("  public void set"+className+"(Set<"+className +"> "+className.toLowerCase()+"s) {");
+				printWriter.println("    this."+className.toLowerCase()+"s = "+className.toLowerCase()+"s;");
+				printWriter.println("  }\r\n");
+			}			
+		});
 	}
 	
 	/**
@@ -231,4 +281,17 @@ public class GenerateJavaFile implements FileGeneratorInterface {
 		
 	}
 
+	public Set<Table> getTables() {
+		return Collections.unmodifiableSet(tables);
+	}
+	/**
+	 * 查看表中的主键数量，主键数量为1则返回true,主键数量超过1则返回false
+	 * @param table
+	 * @return
+	 */
+	private boolean countOfPrimaryKeys(String tableName) {
+		return getTables().stream().filter(tb->tb.getTableName().equals(tableName)).map(Table::getCountOfPrimaryKey)
+		.findFirst().get() == 1 ? true:false;
+	}
+	
 }

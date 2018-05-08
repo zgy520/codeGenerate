@@ -30,7 +30,8 @@ public class Employee{
   private Long employeeID;
   //bigint(20) 
   private Long classID;
-  //bigint(20)  
+  //bigint(20) 
+  private Long posID;
   //varchar(50) 
   @NotNull
   private String employeeName;
@@ -42,13 +43,17 @@ public class Employee{
   private Long orgID;
   //bigint(20) 
   private Long userID;
-  //以下是对应的实体关系  
-
+  //以下是对应的实体关系
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "posID")
   private Position  position;
 
- 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "classID")
+  private Teamclass  teamclass;
+
+  @OneToMany(mappedBy = "employee")
+  private Set<Godownkeeper>  godownkeepers = new HashSet<>();
 
   @OneToMany(mappedBy = "employee")
   private Set<Manager>  managers = new HashSet<>();
@@ -74,7 +79,16 @@ public class Employee{
   public Long getClassID(){
     return this.classID;
   }
- 
+
+
+  public void setPosID(Long posID){
+    this.posID = posID;
+  }
+
+
+  public Long getPosID(){
+    return this.posID;
+  }
 
 
   public void setEmployeeName(String employeeName){
@@ -115,4 +129,36 @@ public class Employee{
   public Long getUserID(){
     return this.userID;
   }
+  public Position getPosition() {
+    return this.position;
+  }
+
+  public void setPosition(Position position) {
+    this.position = position;
+  }
+
+  public Teamclass getTeamclass() {
+    return this.teamclass;
+  }
+
+  public void setTeamclass(Teamclass teamclass) {
+    this.teamclass = teamclass;
+  }
+
+  public Set<Godownkeeper> getGodownkeeper() {
+    return this.godownkeepers;
+  }
+
+  public void setGodownkeeper(Set<Godownkeeper> godownkeepers) {
+    this.godownkeepers = godownkeepers;
+  }
+
+  public Set<Manager> getManager() {
+    return this.managers;
+  }
+
+  public void setManager(Set<Manager> managers) {
+    this.managers = managers;
+  }
+
 }

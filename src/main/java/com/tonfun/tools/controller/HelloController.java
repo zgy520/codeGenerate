@@ -41,8 +41,8 @@ public class HelloController {
 	
 	@RequestMapping("/")
 	public String index() throws Exception {
-		//databaseRepository.getMeta();
-		System.out.println("获取到的产品的数量为:"+btnDao.findAll().size()+"个");
+		databaseRepository.getMeta();
+		/*System.out.println("获取到的产品的数量为:"+btnDao.findAll().size()+"个");
 		Product product = new Product();
 		product.setBrandID(1L);
 		product.setModelID(1L);
@@ -51,7 +51,7 @@ public class HelloController {
 		product.setProdName("新添加的产品名称");
 		product.setSpecifications("170HK");
 		btnDao.save(product);
-		System.out.println("prodID 231 对应的产品名称为:"+btnDao.findById(product.getProdID()).getProdName());	
+		System.out.println("prodID 231 对应的产品名称为:"+btnDao.findById(product.getProdID()).getProdName());*/	
 		return "Greetings from Spring boot!";
 	}
 }

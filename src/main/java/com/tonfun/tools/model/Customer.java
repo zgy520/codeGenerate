@@ -43,7 +43,9 @@ public class Customer{
   private String accountNumber;
   //varchar(20) 
   private String taxNumber;
-  //以下是对应的实体关系  
+  //以下是对应的实体关系
+  @OneToMany(mappedBy = "customer")
+  private Set<Customerlinkman>  customerlinkmans = new HashSet<>();
 
   //关系实体创建完毕
 
@@ -116,4 +118,12 @@ public class Customer{
   public String getTaxNumber(){
     return this.taxNumber;
   }
+  public Set<Customerlinkman> getCustomerlinkman() {
+    return this.customerlinkmans;
+  }
+
+  public void setCustomerlinkman(Set<Customerlinkman> customerlinkmans) {
+    this.customerlinkmans = customerlinkmans;
+  }
+
 }

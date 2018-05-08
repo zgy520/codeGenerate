@@ -34,6 +34,7 @@ public class Table {
 	private String tableType;  //表的类型，基本表或者视图
 	private LocalDateTime createTime;  //表的创建时间
 	private String collation;  //编码格式
+	private int countOfPrimaryKey;  // 主键的数量
 	private Set<Column> columns = new HashSet<>();  //该表具有的所有 列的相关信息	
 	private Set<ForeginKey> foreginKeys = new HashSet<>();  //该表所具有的所有的外键信息,对应于多对一的关系
 	private Set<ForeginKey> aniForeginKeys = new HashSet<>();  //对应于一对多的关系的外键信息
@@ -69,6 +70,9 @@ public class Table {
 	}
 	public void AddColumn(Column column) {
 		this.columns.add(column);
+		if (column.isPrimaryKey()) {
+			this.increaseCountOfPrimaryKey();
+		}
 	}
 	/** ========================================================================================
 	 * getTableType: 
@@ -124,5 +128,10 @@ public class Table {
 	public void addAniForeginKey(ForeginKey foreginKey) {
 		this.aniForeginKeys.add(foreginKey);
 	}
-	
+	public int getCountOfPrimaryKey() {
+		return countOfPrimaryKey;
+	}
+	private void increaseCountOfPrimaryKey() {
+		this.countOfPrimaryKey += 1;
+	}
 }

@@ -56,4 +56,12 @@ public class Position{
   public String getPosName(){
     return this.posName;
   }
+  public Set<Employee> getEmployee() {
+    return this.employees;
+  }
+
+  public void setEmployee(Set<Employee> employees) {
+    this.employees = employees;
+  }
+
 }

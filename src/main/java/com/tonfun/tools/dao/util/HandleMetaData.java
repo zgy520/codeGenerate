@@ -69,9 +69,11 @@ public class HandleMetaData {
 	
 	private void generateModel(Set<Table> tables,FileOperator outputDir) throws IOException {
 				
-		FileGeneratorInterface fileGenerator = new GenerateJavaFile();
+		FileGeneratorInterface fileGenerator = new GenerateJavaFile(tables);
 		for(Table table : tables) {
-			fileGenerator.generateCodeFile(table,outputDir);
+			if (table.getCountOfPrimaryKey()==1) {
+				fileGenerator.generateCodeFile(table,outputDir);
+			}		
 		}
 		//fileGenerator.generateCodeFile(table, outputDir);			
 	}
