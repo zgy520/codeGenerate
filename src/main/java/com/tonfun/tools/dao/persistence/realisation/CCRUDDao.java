@@ -126,8 +126,13 @@ public abstract class CCRUDDao<T,ID extends Serializable> implements ICRUDDao<T,
 	 * =======================================================================================
 	 */
 	public Pagination<T> queryByPagination(Pagination<T> pagination){
-		Query query = getEntityManager().createQuery(" from "+this.clazz.getName());
-		
+		Query query = null;
+		if (pagination.getOrderField()!=null && pagination.getOrderBy()!=null) {
+			query = getEntityManager().createQuery(" from "+this.clazz.getName()+" order by "+
+											 pagination.getOrderField()+" "+pagination.getOrderBy());
+		}else {
+			query = getEntityManager().createQuery(" from "+this.clazz.getName());
+		}			
 		query.setFirstResult((pagination.getPager() - 1) * pagination.getCount());
 		query.setMaxResults(pagination.getCount());		
 		List<T> tList = query.getResultList();

@@ -30,7 +30,7 @@ public class Pagination<T>{
 	private int count;  // 每页的数量
 	private int pager; // 当前的页码数
 	private String orderField;  //排序字段
-	private String orderBy;  //排序方式  升序还是降序
+	private SortOrder orderBy;  //排序方式  升序还是降序
 	private List<T> listData;  //数据列表
 	private int totalRecords;  //总的记录数
 	private int totalPages;  //共分了多少页
@@ -49,7 +49,7 @@ public class Pagination<T>{
 		private int pager; // 当前的页码数
 		// 可选的参数
 		private String orderField;  //排序字段
-		private String orderBy;  //排序方式  升序还是降序
+		private SortOrder orderBy;  //排序方式  升序还是降序
 		
 		public PaginationBuilder(int count,int pager) {
 			this.count = count;
@@ -60,7 +60,7 @@ public class Pagination<T>{
 			this.orderField = orderField;
 			return this;
 		}
-		public PaginationBuilder<T> setOrderBy(String orderBy) {
+		public PaginationBuilder<T> setOrderBy(SortOrder orderBy) {
 			this.orderBy = orderBy;
 			return this;
 		}
@@ -117,14 +117,14 @@ public class Pagination<T>{
 	 * getOrderBy: 
 	 * @return orderBy
 	 * =======================================================================================*/
-	public String getOrderBy() {
+	public SortOrder getOrderBy() {
 		return orderBy;
 	}
 	/** ========================================================================================
 	 * setOrderBy: 
 	 * @param orderBy 要设置的 orderBy
 	 * =======================================================================================*/
-	public void setOrderBy(String orderBy) {
+	public void setOrderBy(SortOrder orderBy) {
 		this.orderBy = orderBy;
 	}
 	/** ========================================================================================
