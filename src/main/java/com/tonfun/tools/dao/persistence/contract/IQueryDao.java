@@ -31,4 +31,5 @@ import com.tonfun.tools.dao.persistence.pagination.Pagination;
 public interface IQueryDao<T,ID extends Serializable> extends ICRUDDao<T, ID> {
 	//List<T> findByColumnName(String columnName,String columnVal);  //根据列名返回对用的实体集合
 	Pagination<T> queryByPagination(Pagination<T> pagination);  // 根据分页进行查询
+	Pagination<T> paginationByCriteria(Pagination<T> pagination);  // 根据Criteria API 进行分页查询	
 }

@@ -32,7 +32,7 @@ public class Pagination<T>{
 	private String orderField;  //排序字段
 	private SortOrder orderBy;  //排序方式  升序还是降序
 	private List<T> listData;  //数据列表
-	private int totalRecords;  //总的记录数
+	private long totalRecords;  //总的记录数
 	private int totalPages;  //共分了多少页
 	
 	private Pagination(PaginationBuilder<T> builder){
@@ -161,7 +161,7 @@ public class Pagination<T>{
 	 * getTotalRecords: 
 	 * @return totalRecords
 	 * =======================================================================================*/
-	public int getTotalRecords() {
+	public long getTotalRecords() {
 		return totalRecords;
 	}
 	/** ========================================================================================
@@ -170,6 +170,15 @@ public class Pagination<T>{
 	 * =======================================================================================*/
 	public int getTotalPages() {
 		return totalPages;
+	}
+	/** ========================================================================================
+	 * setTotalRecords: 
+	 * @param totalRecords 要设置的 totalRecords
+	 * =======================================================================================*/
+	public void setTotalRecords(long totalRecords) {
+		this.totalRecords = totalRecords;
+		int totalPages = (int)((totalRecords / this.getCount())+1);
+		this.totalPages = totalPages;
 	}	
 	
 }

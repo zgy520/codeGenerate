@@ -55,13 +55,14 @@ public class HelloController {
 		product.setSpecifications("170HK");
 		btnDao.save(product);
 		System.out.println("prodID 231 对应的产品名称为:"+btnDao.findById(product.getProdID()).getProdName());*/	
-		Pagination<Product> paginationForProduct = new Pagination.PaginationBuilder<Product>(10, 1)
+		Pagination<Product> paginationForProduct = new Pagination.PaginationBuilder<Product>(8, 1)
 							.setOrderBy(SortOrder.DESC).setOrderField("prodName").build();
-		paginationForProduct = btnDao.queryByPagination(paginationForProduct);
+		paginationForProduct = btnDao.paginationByCriteria(paginationForProduct);
 		paginationForProduct.getListData().stream().forEach(product->{
 			System.out.println(product.getProdName());
 		});
-		
+		System.out.println("获取到的数据的总条数为:"+paginationForProduct.getTotalRecords()+",总页数为："
+						+ paginationForProduct.getTotalPages());
 		return "Greetings from Spring boot!";
 	}
 }
