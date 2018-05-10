@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tonfun.tools.dao.DataBaseRepository;
+import com.tonfun.tools.dao.persistence.pagination.Pagination;
+import com.tonfun.tools.dao.persistence.pagination.Pagination.PaginationBuilder;
 import com.tonfun.tools.dao.test.BtnDao;
 import com.tonfun.tools.model.Product;
 
@@ -41,7 +43,7 @@ public class HelloController {
 	
 	@RequestMapping("/")
 	public String index() throws Exception {
-		databaseRepository.getMeta();
+		//databaseRepository.getMeta();
 		/*System.out.println("获取到的产品的数量为:"+btnDao.findAll().size()+"个");
 		Product product = new Product();
 		product.setBrandID(1L);
@@ -52,6 +54,12 @@ public class HelloController {
 		product.setSpecifications("170HK");
 		btnDao.save(product);
 		System.out.println("prodID 231 对应的产品名称为:"+btnDao.findById(product.getProdID()).getProdName());*/	
+		Pagination<Product> paginationForProduct = new Pagination.PaginationBuilder<Product>(10, 1).build();
+		paginationForProduct = btnDao.queryByPagination(paginationForProduct);
+		paginationForProduct.getListData().stream().forEach(product->{
+			System.out.println(product.getProdName());
+		});
+		
 		return "Greetings from Spring boot!";
 	}
 }

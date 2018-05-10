@@ -24,16 +24,19 @@ import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 
 import com.tonfun.tools.dao.persistence.contract.ICRUDDao;
+import com.tonfun.tools.dao.persistence.contract.IQueryDao;
+import com.tonfun.tools.dao.persistence.pagination.Pagination;
 
 /** ========================================================================================
  * @author a4423
  * 增删改查对应的底层类
  * =======================================================================================*/
 @Transactional
-public abstract class CCRUDDao<T,ID extends Serializable> implements ICRUDDao<T, ID> {
+public abstract class CCRUDDao<T,ID extends Serializable> implements ICRUDDao<T, ID>,IQueryDao<T, ID> {
 	private Class<T> clazz;  // 当前操作的实体类
 	
 	@SuppressWarnings("unchecked")
@@ -113,5 +116,22 @@ public abstract class CCRUDDao<T,ID extends Serializable> implements ICRUDDao<T,
 	public void deleteById(ID id) {
 		T entity = this.findById(id);
 		this.delete(entity);
+	}
+	/**
+	 * ========================================================================================
+	 * queryByPagination: 根据分页获取所有的数据
+	 * @param pagination
+	 * @return
+	 * @see com.tonfun.tools.dao.persistence.contract.IQueryDao#queryByPagination(com.tonfun.tools.dao.persistence.pagination.Pagination)
+	 * =======================================================================================
+	 */
+	public Pagination<T> queryByPagination(Pagination<T> pagination){
+		Query query = getEntityManager().createQuery(" from "+this.clazz.getName());
+		
+		query.setFirstResult((pagination.getPager() - 1) * pagination.getCount());
+		query.setMaxResults(pagination.getCount());		
+		List<T> tList = query.getResultList();
+		pagination.setListData(tList);
+		return pagination;
 	}
 }
