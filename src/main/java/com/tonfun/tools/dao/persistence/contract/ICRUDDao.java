@@ -33,4 +33,5 @@ public interface ICRUDDao<T,ID extends Serializable> {
 	void update(T entity);  // 更新对象
 	void delete(T entity);  // 删除对象
 	void deleteById(ID id); // 根据id删除对象
+	void saveOrUpdate(T t);  // 更新或者保存
 }

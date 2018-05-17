@@ -35,7 +35,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.validation.constraints.Null;
 
-import com.tonfun.tools.File.C.GenerateJavaFile;
+import com.tonfun.tools.File.C.GenerateDaoJavaFile;
+import com.tonfun.tools.File.C.GenerateModelJavaFile;
 import com.tonfun.tools.File.I.FileGeneratorInterface;
 import com.tonfun.tools.helper.FileOperator;
 import com.tonfun.tools.helper.OutputStyle;
@@ -63,15 +64,34 @@ public class HandleMetaData {
 		/*for (Table table : tables) {
 			generateModel(table,fileOperator);
 		}	*/
+		// 产生Dao文件
+		FileOperator daoFileOperator = new FileOperator(OutputStyle.Default);
+		daoFileOperator.setPackageName(Optional.of("com.tonfun.tools.dao.test"));		
+		generateDaoClass(databaseMeta.getTables(), daoFileOperator);
 	}
 	
+	private void generateDaoClass(Set<Table> tables,FileOperator fileOperator) {
+		FileGeneratorInterface fileGeneratorInterface = new GenerateDaoJavaFile(tables);
+		for(Table table : tables) {
+			if (table.isCreatedFile()) {
+				fileGeneratorInterface.generateCodeFile(table, fileOperator);
+			}			
+		}
+	}
 	
-	
+	/**
+	 * ========================================================================================
+	 * generateModel: 产生实体类 
+	 * @param tables
+	 * @param outputDir
+	 * @throws IOException
+	 * =======================================================================================
+	 */
 	private void generateModel(Set<Table> tables,FileOperator outputDir) throws IOException {
 				
-		FileGeneratorInterface fileGenerator = new GenerateJavaFile(tables);
+		FileGeneratorInterface fileGenerator = new GenerateModelJavaFile(tables);
 		for(Table table : tables) {
-			if (table.getCountOfPrimaryKey()==1) {
+			if (table.isCreatedFile()) {
 				fileGenerator.generateCodeFile(table,outputDir);
 			}		
 		}

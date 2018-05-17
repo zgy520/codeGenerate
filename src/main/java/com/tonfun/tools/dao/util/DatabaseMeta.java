@@ -44,6 +44,7 @@ public class DatabaseMeta {
 			for(ForeginKey foreginKey: this.foreginKeys) {
 				if (table.getTableName().equals(foreginKey.getTableName())) {
 					table.addForeginKey(foreginKey);
+					
 				}
 				if (table.getTableName().equals(foreginKey.getReferencedTableName())) {
 					table.addAniForeginKey(foreginKey);

@@ -21,6 +21,7 @@ package com.tonfun.tools.dao.persistence.contract;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import com.tonfun.tools.dao.persistence.pagination.Pagination;
 
@@ -29,7 +30,12 @@ import com.tonfun.tools.dao.persistence.pagination.Pagination;
  * 常见的查询的底层实现类
  * =======================================================================================*/
 public interface IQueryDao<T,ID extends Serializable> extends ICRUDDao<T, ID> {
-	//List<T> findByColumnName(String columnName,String columnVal);  //根据列名返回对用的实体集合
 	Pagination<T> queryByPagination(Pagination<T> pagination);  // 根据分页进行查询
 	Pagination<T> paginationByCriteria(Pagination<T> pagination);  // 根据Criteria API 进行分页查询	
+	Pagination<T> paginationByScrollableReslt(Pagination<T> pagination); // 根据ScrollableResults API进行分页查询
+	List<T> getObjListByColumnName(String columnName,String columnVal);  //根据列名和列值获取实体的集合
+	List<T> getObjListByColMap(Map<String, String> colVals);  //根据列和值的集合获取实体的集合
+	List<T> getObjListByLike(String columnName,String colmnVal);  //like查询
+	Pagination<T> getPagingObjListByQuery(Pagination<T> pagination,String whereClause);  //根据sql语句查询对象列表
+	List<T> getObjListByQuery(String sqlQuery); // 根据查询条件查询对象列表
 }

@@ -31,6 +31,7 @@ public class Column {
 	private boolean isPrimaryKey;  //是否为主键
 	private String columnComment;  //列注释
 	private Integer serial;  //序列
+	private boolean isForeginKey; // 是否是外键
 	public Column(String columnName,String columnType,boolean isNull,boolean isPrimaryKey,String columnComment,Integer serial) {
 		this.columnName = columnName;
 		this.columnType = columnType;		
@@ -87,5 +88,19 @@ public class Column {
 	 * =======================================================================================*/
 	public Integer getSerial() {
 		return serial;
+	}
+	/** ========================================================================================
+	 * isForeginKey: 
+	 * @return isForeginKey
+	 * =======================================================================================*/
+	public boolean isForeginKey() {
+		return isForeginKey;
+	}
+	/** ========================================================================================
+	 * setForeginKey: 
+	 * @param isForeginKey 要设置的 isForeginKey
+	 * =======================================================================================*/
+	public void setForeginKey(boolean isForeginKey) {
+		this.isForeginKey = isForeginKey;
 	}		
 }

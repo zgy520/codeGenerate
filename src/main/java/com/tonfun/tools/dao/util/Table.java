@@ -117,6 +117,12 @@ public class Table {
 	 */
 	public void addForeginKey(ForeginKey foreginKey) {
 		this.foreginKeys.add(foreginKey);
+		// 在添加外键的信息时，更新表中对应列的isForeginKey字段
+		this.columns.stream().forEach(column->{
+			if (column.getColumnName().equals(foreginKey.getColumnName())) {
+				column.setForeginKey(true);
+			}
+		});
 	}
 	/** ========================================================================================
 	 * getAniForeginKeys: 
@@ -133,5 +139,16 @@ public class Table {
 	}
 	private void increaseCountOfPrimaryKey() {
 		this.countOfPrimaryKey += 1;
+	}
+	/**
+	 * ========================================================================================
+	 * isCreatedFile: 是否创建相应的文件
+	 * 主键数量为1或者为视图的才创建相应的实体类、dao类以及其他的文件
+	 * 对于其他情况，不予处理
+	 * @return
+	 * =======================================================================================
+	 */
+	public boolean isCreatedFile() {
+		return this.countOfPrimaryKey==1 || this.tableType.equals("VIEW");
 	}
 }

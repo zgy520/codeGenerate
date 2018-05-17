@@ -25,13 +25,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import com.tonfun.tools.dao.persistence.realisation.CCQueryDao;
 import com.tonfun.tools.dao.persistence.realisation.CCRUDDao;
 
 /** ========================================================================================
  * @author a4423
  * 
  * =======================================================================================*/
-public class SystemGenericDao<T,ID extends Serializable> extends CCRUDDao<T, ID> {
+public class SystemGenericDao<T,ID extends Serializable> extends CCQueryDao<T, ID> {
 
 	@PersistenceContext
 	protected EntityManager sysManager;

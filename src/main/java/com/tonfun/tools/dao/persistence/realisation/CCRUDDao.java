@@ -21,6 +21,7 @@ package com.tonfun.tools.dao.persistence.realisation;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -31,23 +32,30 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
+import org.hibernate.ScrollMode;
+import org.hibernate.ScrollableResults;
+import org.hibernate.Session;
+
 import com.tonfun.tools.dao.persistence.contract.ICRUDDao;
 import com.tonfun.tools.dao.persistence.contract.IQueryDao;
 import com.tonfun.tools.dao.persistence.pagination.Pagination;
+import com.tonfun.tools.dao.persistence.pagination.SortOrder;
 
 /** ========================================================================================
  * @author a4423
  * 增删改查对应的底层类
  * =======================================================================================*/
 @Transactional
-public abstract class CCRUDDao<T,ID extends Serializable> implements ICRUDDao<T, ID>,IQueryDao<T, ID> {
-	private Class<T> clazz;  // 当前操作的实体类
+public abstract class CCRUDDao<T,ID extends Serializable> implements ICRUDDao<T, ID> {
+	protected Class<T> clazz;  // 当前操作的实体类	
 	
 	@SuppressWarnings("unchecked")
 	public CCRUDDao(){
 		this.clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
 				.getActualTypeArguments()[0];
 	}
+	
+	
 	
 	public abstract EntityManager getEntityManager();
 	
@@ -120,73 +128,18 @@ public abstract class CCRUDDao<T,ID extends Serializable> implements ICRUDDao<T,
 	public void deleteById(ID id) {
 		T entity = this.findById(id);
 		this.delete(entity);
+	}	
+
+
+	/** ========================================================================================
+	 * saveOrUpdate: 
+	 * @param t
+	 * @see com.tonfun.tools.dao.persistence.contract.ICRUDDao#saveOrUpdate(java.lang.Object)
+	 * =======================================================================================*/
+	@Override
+	public void saveOrUpdate(T t) {
+		// TODO Auto-generated method stub
+		
 	}
-	/**
-	 * ========================================================================================
-	 * queryByPagination: 根据分页获取所有的数据
-	 * @param pagination
-	 * @return
-	 * @see com.tonfun.tools.dao.persistence.contract.IQueryDao#queryByPagination(com.tonfun.tools.dao.persistence.pagination.Pagination)
-	 * =======================================================================================
-	 */
-	public Pagination<T> queryByPagination(Pagination<T> pagination){
-		Query query = null;
-		if (pagination.getOrderField()!=null && pagination.getOrderBy()!=null) {
-			query = getEntityManager().createQuery(" from "+this.clazz.getName()+" order by "+
-											 pagination.getOrderField()+" "+pagination.getOrderBy());
-		}else {
-			query = getEntityManager().createQuery(" from "+this.clazz.getName());
-		}			
-		query.setFirstResult((pagination.getPager() - 1) * pagination.getCount());
-		query.setMaxResults(pagination.getCount());		
-		List<T> tList = query.getResultList();
-		pagination.setListData(tList);
-		long totalRecords = getRecordsOfEntity();
-		pagination.setTotalRecords(totalRecords);			
-		return pagination;
-	}
-	/**
-	 * ========================================================================================
-	 * getRecordsOfEntity: 获取实体的总数量
-	 * @return
-	 * =======================================================================================
-	 */
-	private long getRecordsOfEntity() {
-		Query query = getEntityManager().createQuery("select count(*) from "+this.clazz.getName());
-		long count =(Long)query.getSingleResult();
-		return count;
-	}
-	/**
-	 * ========================================================================================
-	 * paginationByCriteria:根据API 进行查询 
-	 * @param pagination
-	 * @return
-	 * @see com.tonfun.tools.dao.persistence.contract.IQueryDao#paginationByCriteria(com.tonfun.tools.dao.persistence.pagination.Pagination)
-	 * =======================================================================================
-	 */
-	public Pagination<T> paginationByCriteria(Pagination<T> pagination){
-		CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
-		CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(this.clazz);
-		Root<T> from = criteriaQuery.from(this.clazz);
-		CriteriaQuery<T> select = criteriaQuery.select(from);
-		TypedQuery<T> typedQuery = getEntityManager().createQuery(select);
-		typedQuery.setFirstResult((pagination.getPager() - 1) * pagination.getCount());
-		typedQuery.setMaxResults(pagination.getCount());
-		pagination.setListData(typedQuery.getResultList());
-		pagination.setTotalRecords(getTotalRecordsByCriteria());
-		return pagination;
-	}
-	/**
-	 * ========================================================================================
-	 * getTotalRecordsByCriteria: 根据criteria api 获取总的数量
-	 * @return
-	 * =======================================================================================
-	 */
-	private long getTotalRecordsByCriteria() {
-		CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
-		CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
-		countQuery.select(criteriaBuilder.count(countQuery.from(this.clazz)));
-		long count = getEntityManager().createQuery(countQuery).getSingleResult();
-		return count;
-	}
+	
 }
