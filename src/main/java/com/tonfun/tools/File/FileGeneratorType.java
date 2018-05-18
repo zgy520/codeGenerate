@@ -12,35 +12,19 @@
 ** Copyright 2011-2018 天津同丰信息技术有限公司保留所有权利。
 **--------------------------------------------------------------------------------------------------
 **
-**  文件名: SystemGenericDao.java
+**  文件名: FiileGeneratorType.java
 **  描  述: 
 **  作  者: a4423
-**  时  间: 2018年5月8日 下午9:30:53
+**  时  间: 2018年5月18日 下午9:00:43
 **------------------------------------------------------------------------------------------------*/
-package com.tonfun.tools.dao.persistence.realisation.module.sys;
-
-import java.io.Serializable;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import com.tonfun.tools.dao.persistence.realisation.CCQueryDao;
+package com.tonfun.tools.File;
 
 /** ========================================================================================
  * @author a4423
- * 
+ * 文件产生器的类型
  * =======================================================================================*/
-public class SystemGenericDao<T,ID extends Serializable> extends CCQueryDao<T, ID> implements ISystemGenericDao<T, ID> {
-
-	@PersistenceContext
-	protected EntityManager sysManager;
-	/** ========================================================================================
-	 * getEntityManager: 
-	 * @return
-	 * @see com.tonfun.tools.dao.persistence.realisation.CCRUDDao#getEntityManager()
-	 * =======================================================================================*/
-	@Override
-	public EntityManager getEntityManager() {
-		// TODO Auto-generated method stub
-		return this.sysManager;
-	}
+public enum FileGeneratorType {
+	Model,  // 模型文件
+	DaoInterface, // dao层的接口文件
+	DaoImpl, // dao层的实现文件
 }

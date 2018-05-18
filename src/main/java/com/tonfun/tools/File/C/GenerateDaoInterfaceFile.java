@@ -12,10 +12,10 @@
 ** Copyright 2011-2018 天津同丰信息技术有限公司保留所有权利。
 **--------------------------------------------------------------------------------------------------
 **
-**  文件名: GenerateDaoJavaFile.java
+**  文件名: GenerateDaoInterfaceFile.java
 **  描  述: 
 **  作  者: a4423
-**  时  间: 2018年5月17日 下午9:23:35
+**  时  间: 2018年5月18日 下午5:29:54
 **------------------------------------------------------------------------------------------------*/
 package com.tonfun.tools.File.C;
 
@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Set;
 
 import com.tonfun.tools.Error.DefaultErrorCode;
 import com.tonfun.tools.Error.ErrCode;
@@ -37,7 +36,7 @@ import com.tonfun.tools.helper.Utils;
  * @author a4423
  * 
  * =======================================================================================*/
-public class GenerateDaoJavaFile implements FileGeneratorInterface {	
+public class GenerateDaoInterfaceFile implements FileGeneratorInterface {
 
 	/** ========================================================================================
 	 * generateCodeFile: 
@@ -51,10 +50,10 @@ public class GenerateDaoJavaFile implements FileGeneratorInterface {
 		// TODO Auto-generated method stub
 		ErrorCode errorCode = new DefaultErrorCode();
 		String modelName = com.tonfun.tools.helper.Utils.captureName(table.getTableName());
-		File file = new File(fileOperator.getPackageDir(),modelName+"Dao.java");
+		File file = new File(fileOperator.getPackageDir(),"I"+modelName+"Dao.java");
 		
 		try {
-			if (!file.exists()) {
+			if (!file.exists()) {				
 				file.createNewFile();				
 			}
 			
@@ -64,10 +63,9 @@ public class GenerateDaoJavaFile implements FileGeneratorInterface {
 			
 			outputPackage(printWriter,modelName);  //将相关的包输出
 			
-			// 以下两行用于在类的头部添加实体类的标识
-			printWriter.println("@Repository");			
-			printWriter.println("public class "+Utils.captureName(table.getTableName())+"Dao" +
-			" extends SystemGenericDao<"+modelName+", Long> " + "implements I"+Utils.captureName(table.getTableName())+"Dao "+
+			// 以下两行用于在类的头部添加实体类的标识			
+			printWriter.println("public interface I"+Utils.captureName(table.getTableName())+"Dao" +
+			" extends ISystemGenericDao<"+modelName+", Long> " +
 			"{\r\n");  //产生类名
 			
 			printWriter.println("}");  // 产生结尾符号
@@ -81,13 +79,16 @@ public class GenerateDaoJavaFile implements FileGeneratorInterface {
 		
 		return errorCode;
 	}
-	
-	private void outputPackage(PrintWriter printWriter,String model) {
-		printWriter.println("\r\n\r\nimport org.springframework.stereotype.Repository;\r\n" + 
-				"import com.tonfun.tools.dao.persistence.realisation.module.sys.SystemGenericDao;\r\n" + 				
-				"import com.tonfun.tools.model."+model+";\r\n"+
-				"import com.tonfun.tools.dao.test.I.I"+model+"Dao;\r\n");
-		printWriter.println("\r\n");
-	};
+	/**
+	 * ========================================================================================
+	 * outputPackage: 输出包名
+	 * @param printWriter
+	 * @param modelName
+	 * =======================================================================================
+	 */
+	public void outputPackage(PrintWriter printWriter,String modelName) {
+		printWriter.println("\r\nimport com.tonfun.tools.dao.persistence.realisation.module.sys.ISystemGenericDao;"
+				+ "\r\nimport com.tonfun.tools.model."+modelName+";\r\n");
+	}
 
 }
