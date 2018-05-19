@@ -44,7 +44,7 @@ public class XmlParser implements IXmlParser {
 	private File xmlFile;
 	public XmlParser(String xmlFileName) {
 		this.xmlFileName = xmlFileName;
-		xmlFile = new File(xmlFileName);
+		xmlFile = new File(this.xmlFileName);
 	}
 	/** ========================================================================================
 	 * xmlParser: 
@@ -59,7 +59,7 @@ public class XmlParser implements IXmlParser {
 			dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(this.xmlFile);
 			doc.getDocumentElement().normalize();			
-			Node node = doc.getElementsByTagName("packageName").item(0); 		
+			Node node = doc.getElementsByTagName("packageName").item(0); // 暂时仅仅获取xml中packageName下的节点	
 			return parseNode(node,fileGeneratorType);						
 		}catch (SAXException | ParserConfigurationException | IOException e) {
 			// TODO: handle exception
@@ -67,7 +67,14 @@ public class XmlParser implements IXmlParser {
 		}
 		return "";
 	}
-	
+	/**
+	 * ========================================================================================
+	 * parseNode: 解析packageName下的节点
+	 * @param node
+	 * @param fileGeneratorType
+	 * @return
+	 * =======================================================================================
+	 */
 	private String parseNode(Node node,FileGeneratorType fileGeneratorType) {	
 		String packageName = "";
 		if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -79,7 +86,7 @@ public class XmlParser implements IXmlParser {
 	}
 	/**
 	 * ========================================================================================
-	 * getTagValue: 
+	 * getTagValue: 根据tag获取元素中对应的值
 	 * @param tag
 	 * @param element
 	 * @return

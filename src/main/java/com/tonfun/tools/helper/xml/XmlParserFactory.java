@@ -12,20 +12,23 @@
 ** Copyright 2011-2018 天津同丰信息技术有限公司保留所有权利。
 **--------------------------------------------------------------------------------------------------
 **
-**  文件名: FilePackageName.java
+**  文件名: XmlParserFactory.java
 **  描  述: 
 **  作  者: a4423
-**  时  间: 2018年5月19日 下午6:28:04
+**  时  间: 2018年5月19日 下午6:54:17
 **------------------------------------------------------------------------------------------------*/
-package com.tonfun.tools.util.xml;
-
-import com.tonfun.tools.File.FileGeneratorType;
+package com.tonfun.tools.helper.xml;
 
 /** ========================================================================================
  * @author a4423
- * 每种文件类型所对应的包名
+ * 
  * =======================================================================================*/
-public class FilePackageName {
-	private FileGeneratorType fileGeneratorType;  // 产生文件的类型
-	private String filePackageName;  // 该类型文件对应的包名
+public class XmlParserFactory {
+	private static IXmlParser xmlParser;
+	static {
+		xmlParser = new XmlParser("config.xml");
+	}
+	public static IXmlParser getXmlParser() {
+		return xmlParser;
+	}	
 }

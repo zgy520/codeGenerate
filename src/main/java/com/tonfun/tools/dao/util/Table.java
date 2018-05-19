@@ -149,6 +149,6 @@ public class Table {
 	 * =======================================================================================
 	 */
 	public boolean isCreatedFile() {
-		return this.countOfPrimaryKey==1 || this.tableType.equals("VIEW");
+		return this.countOfPrimaryKey==1;// || this.tableType.equals("VIEW");
 	}
 }
