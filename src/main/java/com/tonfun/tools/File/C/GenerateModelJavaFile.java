@@ -26,13 +26,6 @@ import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-
-import org.springframework.data.mapping.model.CamelCaseSplittingFieldNamingStrategy;
-
 import com.tonfun.tools.Error.DefaultErrorCode;
 import com.tonfun.tools.Error.ErrCode;
 import com.tonfun.tools.Error.ErrorCode;
@@ -44,8 +37,6 @@ import com.tonfun.tools.helper.FileOperator;
 import com.tonfun.tools.helper.Utils;
 import com.tonfun.tools.indepent.TypeConvetor.TypeConvert;
 import com.tonfun.tools.indepent.TypeConvetor.TypeConvertBetweenMySQLAndJava;
-
-import javassist.NotFoundException;
 
 /** ========================================================================================
  * @author a4423

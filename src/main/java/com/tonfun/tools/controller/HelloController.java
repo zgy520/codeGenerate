@@ -23,7 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tonfun.tools.File.FileGeneratorType;
 import com.tonfun.tools.dao.DataBaseRepository;
+import com.tonfun.tools.helper.xml.IXmlParser;
+import com.tonfun.tools.helper.xml.XmlParser;
 
 
 /** ========================================================================================
@@ -41,6 +44,7 @@ public class HelloController {
 	@RequestMapping("/")
 	public String index() throws Exception {
 		databaseRepository.getMeta();
+				
 		/*System.out.println("获取到的产品的数量为:"+btnDao.findAll().size()+"个");
 		Product product = new Product();
 		product.setBrandID(1L);

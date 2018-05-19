@@ -29,19 +29,20 @@ import com.tonfun.tools.File.I.FileGeneratorInterface;
 import com.tonfun.tools.dao.util.Table;
 import com.tonfun.tools.helper.FileOperator;
 import com.tonfun.tools.helper.OutputStyle;
+import com.tonfun.tools.util.xml.XmlParserFactory;
 
 /** ========================================================================================
  * @author a4423
  * 文件产生工厂
  * =======================================================================================*/
 public class FileGeneratorFactory {
-	private static FileOperator fileOperator;
+	private static FileOperator fileOperator;	
 	static {
-		fileOperator = new FileOperator(OutputStyle.Default);
+		fileOperator = new FileOperator(OutputStyle.Default);		
 	}
 	public void setFileOperator(OutputStyle outputStyle) {
 		fileOperator = new FileOperator(outputStyle);
-	}
+	}	
 	/**
 	 * ========================================================================================
 	 * getFileGenerator:根据产生的文件类型返回相应的实现类 
@@ -50,36 +51,17 @@ public class FileGeneratorFactory {
 	 * @return
 	 * =======================================================================================
 	 */
-	public static FileGeneratorModel getFileGenerator(FileGeneratorType generatorType,String packageName,Set<Table> tables) {
+	public static FileGeneratorModel getFileGenerator(FileGeneratorType generatorType,Set<Table> tables) {
 		FileGeneratorInterface fileGeneratorInterface = null;
 		if (generatorType==FileGeneratorType.Model) {
-			fileGeneratorInterface = new GenerateModelJavaFile(tables);
+			fileGeneratorInterface = new GenerateModelJavaFile(tables);			
 		}else if (generatorType==FileGeneratorType.DaoInterface) {
 			fileGeneratorInterface = new GenerateDaoInterfaceFile();
 		}else if (generatorType==FileGeneratorType.DaoImpl) {
 			fileGeneratorInterface = new GenerateDaoJavaFile();
 		}
-		fileOperator.setPackageName(Optional.of(packageName));
+		fileOperator.setPackageName(Optional.of(XmlParserFactory.getXmlParser().xmlParser(generatorType)));
 		FileGeneratorModel fileGeneratorModel = new FileGeneratorModel(fileGeneratorInterface, fileOperator);
 		return fileGeneratorModel;
-	}
-	
-	/**
-	 * ========================================================================================
-	 * getPackageNameByGeneratorType: 根据要产生的文件类型获取对应的包名 
-	 * @param fileGeneratorType
-	 * @return
-	 * =======================================================================================
-	 */
-	public static String getPackageNameByGeneratorType(FileGeneratorType fileGeneratorType) {
-		String packageName = "";
-		if (fileGeneratorType==FileGeneratorType.Model) {
-			packageName = "com.tonfun.tools.model";
-		}else if (fileGeneratorType==FileGeneratorType.DaoInterface) {
-			packageName = "com.tonfun.tools.dao.test.I";
-		}else if (fileGeneratorType==FileGeneratorType.DaoImpl) {
-			packageName = "com.tonfun.tools.dao.test.C";
-		}
-		return packageName;
 	}
 }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 对于整个程序的配置文件 -->
+<codeGenerator>
+	<packageName>		
+		<Model>com.tonfun.tools.Model</Model>
+		<DaoInterface>com.tonfun.tools.dao.test.I</DaoInterface>
+		<DaoImpl>com.tonfun.tools.dao.test.C</DaoImpl>
+	</packageName>
+</codeGenerator>

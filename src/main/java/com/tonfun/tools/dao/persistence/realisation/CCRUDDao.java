@@ -21,25 +21,12 @@ package com.tonfun.tools.dao.persistence.realisation;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
-import org.hibernate.ScrollMode;
-import org.hibernate.ScrollableResults;
-import org.hibernate.Session;
-
 import com.tonfun.tools.dao.persistence.contract.ICRUDDao;
-import com.tonfun.tools.dao.persistence.contract.IQueryDao;
-import com.tonfun.tools.dao.persistence.pagination.Pagination;
-import com.tonfun.tools.dao.persistence.pagination.SortOrder;
 
 /** ========================================================================================
  * @author a4423

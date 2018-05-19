@@ -27,10 +27,12 @@ import java.io.PrintWriter;
 import com.tonfun.tools.Error.DefaultErrorCode;
 import com.tonfun.tools.Error.ErrCode;
 import com.tonfun.tools.Error.ErrorCode;
+import com.tonfun.tools.File.FileGeneratorType;
 import com.tonfun.tools.File.I.FileGeneratorInterface;
 import com.tonfun.tools.dao.util.Table;
 import com.tonfun.tools.helper.FileOperator;
 import com.tonfun.tools.helper.Utils;
+import com.tonfun.tools.util.xml.XmlParserFactory;
 
 /** ========================================================================================
  * @author a4423
@@ -88,7 +90,7 @@ public class GenerateDaoInterfaceFile implements FileGeneratorInterface {
 	 */
 	public void outputPackage(PrintWriter printWriter,String modelName) {
 		printWriter.println("\r\nimport com.tonfun.tools.dao.persistence.realisation.module.sys.ISystemGenericDao;"
-				+ "\r\nimport com.tonfun.tools.model."+modelName+";\r\n");
+				+ "\r\nimport "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.Model)+"."+modelName+";\r\n");
 	}
 
 }

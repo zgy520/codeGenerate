@@ -19,23 +19,15 @@
 **------------------------------------------------------------------------------------------------*/
 package com.tonfun.tools.dao.util;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.validation.constraints.Null;
-
 import com.tonfun.tools.File.FileGeneratorFactory;
 import com.tonfun.tools.File.FileGeneratorModel;
 import com.tonfun.tools.File.FileGeneratorType;
@@ -44,7 +36,6 @@ import com.tonfun.tools.File.C.GenerateDaoJavaFile;
 import com.tonfun.tools.File.C.GenerateModelJavaFile;
 import com.tonfun.tools.File.I.FileGeneratorInterface;
 import com.tonfun.tools.helper.FileOperator;
-import com.tonfun.tools.helper.OutputStyle;
 
 /** ========================================================================================
  * @author a4423
@@ -89,9 +80,8 @@ public class HandleMetaData {
 	 */
 	private void generateRelatedFiles(Set<Table> tables) {
 		EnumSet.allOf(FileGeneratorType.class)
-				.forEach(generateType->{  // 对枚举进行遍历
-					String packageName = FileGeneratorFactory.getPackageNameByGeneratorType(generateType);  // 根据文件类型，获取相应的包名
-					FileGeneratorModel fileGeneratorModel = FileGeneratorFactory.getFileGenerator(generateType, packageName, tables);
+				.forEach(generateType->{  // 对枚举进行遍历					
+					FileGeneratorModel fileGeneratorModel = FileGeneratorFactory.getFileGenerator(generateType, tables);
 					for(Table table : tables) {
 						if (table.isCreatedFile()) {
 							fileGeneratorModel.getFileGeneratorInterface().generateCodeFile(table, fileGeneratorModel.getFileOperator());

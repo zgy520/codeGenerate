@@ -23,15 +23,15 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Set;
-
 import com.tonfun.tools.Error.DefaultErrorCode;
 import com.tonfun.tools.Error.ErrCode;
 import com.tonfun.tools.Error.ErrorCode;
+import com.tonfun.tools.File.FileGeneratorType;
 import com.tonfun.tools.File.I.FileGeneratorInterface;
 import com.tonfun.tools.dao.util.Table;
 import com.tonfun.tools.helper.FileOperator;
 import com.tonfun.tools.helper.Utils;
+import com.tonfun.tools.util.xml.XmlParserFactory;
 
 /** ========================================================================================
  * @author a4423
@@ -85,8 +85,8 @@ public class GenerateDaoJavaFile implements FileGeneratorInterface {
 	private void outputPackage(PrintWriter printWriter,String model) {
 		printWriter.println("\r\n\r\nimport org.springframework.stereotype.Repository;\r\n" + 
 				"import com.tonfun.tools.dao.persistence.realisation.module.sys.SystemGenericDao;\r\n" + 				
-				"import com.tonfun.tools.model."+model+";\r\n"+
-				"import com.tonfun.tools.dao.test.I.I"+model+"Dao;\r\n");
+				"import "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.Model)+"."+model+";\r\n"+
+				"import "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.DaoInterface)+".I"+model+"Dao;\r\n");
 		printWriter.println("\r\n");
 	};
 

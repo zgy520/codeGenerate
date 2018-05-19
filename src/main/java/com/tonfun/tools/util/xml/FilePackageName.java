@@ -12,31 +12,20 @@
 ** Copyright 2011-2018 天津同丰信息技术有限公司保留所有权利。
 **--------------------------------------------------------------------------------------------------
 **
-**  文件名: Utils.java
+**  文件名: FilePackageName.java
 **  描  述: 
 **  作  者: a4423
-**  时  间: 2018年4月26日 下午9:49:45
+**  时  间: 2018年5月19日 下午6:28:04
 **------------------------------------------------------------------------------------------------*/
-package com.tonfun.tools.helper;
+package com.tonfun.tools.util.xml;
+
+import com.tonfun.tools.File.FileGeneratorType;
 
 /** ========================================================================================
  * @author a4423
- * 
+ * 每种文件类型所对应的包名
  * =======================================================================================*/
-public class Utils {
-	/**
-	 * ========================================================================================
-	 * captureName:首字母大写 
-	 * @param str
-	 * @return
-	 * =======================================================================================
-	 */
-	public static String captureName(String str) {
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(str.substring(0, 1).toLowerCase());
-		stringBuilder.append(str.substring(1));
-		char[] cs = stringBuilder.toString().toCharArray();		
-		cs[0]-=32;
-		return String.valueOf(cs);
-	}	
+public class FilePackageName {
+	private FileGeneratorType fileGeneratorType;  // 产生文件的类型
+	private String filePackageName;  // 该类型文件对应的包名
 }

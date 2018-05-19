@@ -19,28 +19,15 @@
 **------------------------------------------------------------------------------------------------*/
 package com.tonfun.tools.dao;
 
-import java.io.IOException;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.validation.constraints.Null;
-
 import org.hibernate.engine.spi.SessionImplementor;
 import org.springframework.stereotype.Repository;
 
-import com.tonfun.tools.dao.util.Column;
 import com.tonfun.tools.dao.util.HandleMetaData;
-import com.tonfun.tools.dao.util.Table;
 
 /** ========================================================================================
  * @author a4423
