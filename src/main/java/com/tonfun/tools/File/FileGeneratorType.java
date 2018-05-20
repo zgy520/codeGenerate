@@ -27,4 +27,6 @@ public enum FileGeneratorType {
 	Model,  // 模型文件
 	DaoInterface, // dao层的接口文件
 	DaoImpl, // dao层的实现文件
+	ServiceInterface, //service层的接口文件
+	ServiceImpl,  //serivce层的实现文件
 }

@@ -5,5 +5,7 @@
 		<Model>com.tonfun.tools.Model</Model>
 		<DaoInterface>com.tonfun.tools.dao.test.I</DaoInterface>
 		<DaoImpl>com.tonfun.tools.dao.test.C</DaoImpl>
+		<ServiceInterface>com.tonfun.tools.service.I.module.sys.CI</ServiceInterface>
+		<ServiceImpl>com.tonfun.tools.service.C.module.sys.CC</ServiceImpl>
 	</packageName>
 </codeGenerator>

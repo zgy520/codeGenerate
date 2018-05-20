@@ -23,10 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tonfun.tools.File.FileGeneratorType;
 import com.tonfun.tools.dao.DataBaseRepository;
-import com.tonfun.tools.helper.xml.IXmlParser;
-import com.tonfun.tools.helper.xml.XmlParser;
+import com.tonfun.tools.dao.persistence.pagination.Pagination;
+import com.tonfun.tools.dao.persistence.pagination.SortOrder;
 
 
 /** ========================================================================================
@@ -38,32 +37,10 @@ public class HelloController {
 	@Autowired
 	DataBaseRepository databaseRepository;
 	
-	/*@Autowired
-	BtnDao btnDao;	*/
 	
 	@RequestMapping("/")
 	public String index() throws Exception {
 		databaseRepository.getMeta();
-				
-		/*System.out.println("获取到的产品的数量为:"+btnDao.findAll().size()+"个");
-		Product product = new Product();
-		product.setBrandID(1L);
-		product.setModelID(1L);
-		product.setSpecID(1l);
-		product.setUnitID(1L);
-		product.setProdName("新添加的产品名称");
-		product.setSpecifications("170HK");
-		btnDao.save(product);
-		System.out.println("prodID 231 对应的产品名称为:"+btnDao.findById(product.getProdID()).getProdName());*/
-		
-		/*Pagination<Product> paginationForProduct = new Pagination.PaginationBuilder<Product>(8, 1)
-							.setOrderBy(SortOrder.DESC).setOrderField("prodname").build();
-		List<Product> allPrducts = btnDao.getObjListByQuery(" where specifications = '170KG' order by prodName DESC");
-		allPrducts.stream().forEach(product->{
-			System.out.println(product.getProdName());
-		});		
-		System.out.println("获取到的数据的总条数为:"+paginationForProduct.getTotalRecords()+",总页数为："
-						+ paginationForProduct.getTotalPages());*/
 		
 		return "Greetings from Spring boot!";
 	}

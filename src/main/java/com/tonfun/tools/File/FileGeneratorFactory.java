@@ -25,6 +25,8 @@ import java.util.Set;
 import com.tonfun.tools.File.C.GenerateDaoInterfaceFile;
 import com.tonfun.tools.File.C.GenerateDaoJavaFile;
 import com.tonfun.tools.File.C.GenerateModelJavaFile;
+import com.tonfun.tools.File.C.GenerateServiceImplFile;
+import com.tonfun.tools.File.C.GenerateServiceInterfaceFile;
 import com.tonfun.tools.File.I.FileGeneratorInterface;
 import com.tonfun.tools.dao.util.Table;
 import com.tonfun.tools.helper.FileOperator;
@@ -59,6 +61,10 @@ public class FileGeneratorFactory {
 			fileGeneratorInterface = new GenerateDaoInterfaceFile();
 		}else if (generatorType==FileGeneratorType.DaoImpl) {
 			fileGeneratorInterface = new GenerateDaoJavaFile();
+		}else if (generatorType==FileGeneratorType.ServiceInterface) {
+			fileGeneratorInterface = new GenerateServiceInterfaceFile();
+		}else if (generatorType==FileGeneratorType.ServiceImpl) {
+			fileGeneratorInterface = new GenerateServiceImplFile();
 		}
 		fileOperator.setPackageName(Optional.of(XmlParserFactory.getXmlParser().xmlParser(generatorType)));
 		FileGeneratorModel fileGeneratorModel = new FileGeneratorModel(fileGeneratorInterface, fileOperator);
