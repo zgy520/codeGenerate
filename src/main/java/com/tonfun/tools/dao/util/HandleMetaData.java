@@ -47,12 +47,18 @@ public class HandleMetaData {
 	public HandleMetaData(EntityManager em) {
 		this.em = em;
 	}
-	
+	/**
+	 * ========================================================================================
+	 * getTableInfo: 根据数据库的名称获取表相关的信息
+	 * @param schameName
+	 * @throws Exception
+	 * =======================================================================================
+	 */
 	public void getTableInfo(String schameName) throws Exception{
 		Set<Table> tables = this.queryTableInfo(schameName);
 		Set<ForeginKey> foreginKeys = this.queryForeginInfo(schameName);
 		DatabaseMeta databaseMeta = new DatabaseMeta(tables, foreginKeys);	
-		tables = databaseMeta.updateTableWithForegin();  // 跟新表中的外键信息
+		tables = databaseMeta.updateTableWithForegin();  // 更新表中的外键信息
 		this.generateRelatedFiles(tables);  // 创建相应的文件
 		
 		/*FileOperator fileOperator = new FileOperator(OutputStyle.Default);		
@@ -148,6 +154,7 @@ public class HandleMetaData {
 	 * @return 返回该数据库中所有的外键信息
 	 * =======================================================================================
 	 */
+	@SuppressWarnings("unchecked")
 	private Set<ForeginKey> queryForeginInfo(String schemaName){
 		Set<ForeginKey> foreginKeys = new HashSet<>();
 		Query query = em.createNativeQuery("select table_name, column_name,referenced_table_name,referenced_column_name"
@@ -166,11 +173,16 @@ public class HandleMetaData {
 	/**
 	 * ========================================================================================
 	 * queryTableInfo:获取该数据库下的所有表信息 
+	 * select * from INFORMATION_SCHEMA.TABLES 获取到的信息包括如下信息：
+	 * TABLE_CATALOG,TABLE_SCHEMA,TABLE_NAME,TABLE_TYPE,ENGINE,VERSION,ROW_FORMAT,TABLE_ROWS,
+	 * AVG_ROW__LENGTH,DATA_LENGTH,MAX_DATA_LENGTH,INDEX_LENGTH,DATA_FREE,AUTO_INCREMENT,CREATE_TIME,
+	 * UPDATE_TIME,CHECK_TIME,TABLE_COLLATION,CHECKSUM,CREATE_OPTIONS,TABLE_COMMENT
 	 * @return
 	 * =======================================================================================
 	 */
+	@SuppressWarnings("unchecked")
 	private Set<Table> queryTableInfo(String schemaName) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+		//DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
 		Set<Table> schameTables = new HashSet<Table>();
 		Query query = em.createNativeQuery("select * from INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA = '"+schemaName+"'");
 		List<Object[]> list = query.getResultList();
@@ -182,6 +194,14 @@ public class HandleMetaData {
 		schameTables = queryColumnByTable(schameTables);
 		return schameTables;
 	}
+	/**
+	 * ========================================================================================
+	 * queryColumnByTable: 根据表获取相应表中的列信息
+	 * @param tables
+	 * @return
+	 * =======================================================================================
+	 */
+	@SuppressWarnings("unchecked")
 	private Set<Table> queryColumnByTable(Set<Table> tables){		
 		for (Table table : tables) {
 			Query query = em.createNativeQuery("select COLUMN_NAME,IS_NULLABLE,COLUMN_TYPE,COLUMN_KEY,EXTRA,COLUMN_COMMENT,ORDINAL_POSITION from"

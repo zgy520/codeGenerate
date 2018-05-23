@@ -24,7 +24,7 @@ import com.tonfun.tools.helper.FileOperator;
 
 /** ========================================================================================
  * @author a4423
- * 
+ * 构造一个实体类，用于记录文件产生器类和FileOperator(文件产生的基本信息）
  * =======================================================================================*/
 public class FileGeneratorModel {
 	private FileGeneratorInterface fileGeneratorInterface;
