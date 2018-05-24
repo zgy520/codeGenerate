@@ -37,7 +37,7 @@ import com.tonfun.tools.helper.xml.XmlParserFactory;
  * @author a4423
  * 
  * =======================================================================================*/
-public class GenerateDaoJavaFile implements FileGeneratorInterface {	
+public class GenerateServiceImplFile implements FileGeneratorInterface {	
 
 	/** ========================================================================================
 	 * generateCodeFile: 
@@ -51,7 +51,7 @@ public class GenerateDaoJavaFile implements FileGeneratorInterface {
 		// TODO Auto-generated method stub
 		ErrorCode errorCode = new DefaultErrorCode();
 		String modelName = com.tonfun.tools.helper.Utils.captureName(table.getTableName());
-		File file = new File(fileOperator.getPackageDir(),modelName+"DaoImpl.java");
+		File file = new File(fileOperator.getPackageDir(),modelName+"ServiceImpl.java");
 		
 		try {
 			if (!file.exists()) {
@@ -65,9 +65,9 @@ public class GenerateDaoJavaFile implements FileGeneratorInterface {
 			outputPackage(printWriter,modelName);  //将相关的包输出
 			
 			// 以下两行用于在类的头部添加实体类的标识
-			printWriter.println("@Repository");			
-			printWriter.println("public class "+Utils.captureName(table.getTableName())+"DaoImpl" +
-			" extends SystemGenericDao<"+modelName+", Long> " + "implements I"+Utils.captureName(table.getTableName())+"Dao "+
+			printWriter.println("@Service");			
+			printWriter.println("public class "+Utils.captureName(table.getTableName())+"ServiceImpl" +
+			" extends CGenericSysImpl<"+modelName+", Long> " + "implements I"+Utils.captureName(table.getTableName())+"Service "+
 			"{\r\n");  //产生类名
 			
 			printWriter.println("}");  // 产生结尾符号
@@ -83,10 +83,10 @@ public class GenerateDaoJavaFile implements FileGeneratorInterface {
 	}
 	
 	private void outputPackage(PrintWriter printWriter,String model) {
-		printWriter.println("\r\n\r\nimport org.springframework.stereotype.Repository;\r\n" + 
-				"import com.tonfun.tools.dao.persistence.realisation.module.sys.SystemGenericDao;\r\n" + 				
+		printWriter.println("\r\n\r\nimport org.springframework.stereotype.Service;\r\n" + 
+				"import com.tonfun.tools.service.C.module.sys.CGenericSysImpl;\r\n" + 				
 				"import "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.Model)+"."+model+";\r\n"+
-				"import "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.DaoInterface)+".I"+model+"Dao;\r\n");
+				"import "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.ServiceInterface)+".I"+model+"Service;\r\n");
 		printWriter.println("\r\n");
 	};
 

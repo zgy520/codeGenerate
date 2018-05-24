@@ -24,6 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
@@ -33,9 +34,12 @@ import com.tonfun.tools.File.FileGeneratorModel;
 import com.tonfun.tools.File.FileGeneratorType;
 import com.tonfun.tools.File.C.GenerateDaoInterfaceFile;
 import com.tonfun.tools.File.C.GenerateDaoJavaFile;
+import com.tonfun.tools.File.C.GenerateJavaFile;
+import com.tonfun.tools.File.C.GenerateModelFile;
 import com.tonfun.tools.File.C.GenerateModelJavaFile;
 import com.tonfun.tools.File.I.FileGeneratorInterface;
 import com.tonfun.tools.helper.FileOperator;
+import com.tonfun.tools.helper.OutputStyle;
 
 /** ========================================================================================
  * @author a4423
@@ -59,7 +63,9 @@ public class HandleMetaData {
 		Set<ForeginKey> foreginKeys = this.queryForeginInfo(schameName);
 		DatabaseMeta databaseMeta = new DatabaseMeta(tables, foreginKeys);	
 		tables = databaseMeta.updateTableWithForegin();  // 更新表中的外键信息
-		this.generateRelatedFiles(tables);  // 创建相应的文件
+		//this.generateRelatedFiles(tables);  // 创建相应的文件
+		
+		this.testGenericJavaFile(tables);
 		
 		/*FileOperator fileOperator = new FileOperator(OutputStyle.Default);		
 		fileOperator.setPackageName(Optional.of("com.tonfun.tools.model"));		
@@ -78,6 +84,15 @@ public class HandleMetaData {
 	
 		
 	}
+	
+	private void testGenericJavaFile(Set<Table> tables) {
+		FileOperator fileOperator = new FileOperator(OutputStyle.Default);
+		fileOperator.setSuffixName("");
+		fileOperator.setPackageName(Optional.of("com.tonfun.tools.Model"));
+		GenerateJavaFile generateJavaFile = new GenerateModelFile(tables, fileOperator);
+		generateJavaFile.fileGenerator();
+	}
+	
 	/**
 	 * ========================================================================================
 	 * generateRelatedFiles: 根据数据库中的表信息，创建需要的各类文件

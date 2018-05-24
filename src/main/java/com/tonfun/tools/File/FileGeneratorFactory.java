@@ -25,6 +25,8 @@ import java.util.Set;
 import com.tonfun.tools.File.C.GenerateDaoInterfaceFile;
 import com.tonfun.tools.File.C.GenerateDaoJavaFile;
 import com.tonfun.tools.File.C.GenerateModelJavaFile;
+import com.tonfun.tools.File.C.GenerateServiceImplFile;
+import com.tonfun.tools.File.C.GenerateServiceInterfaceFile;
 import com.tonfun.tools.File.I.FileGeneratorInterface;
 import com.tonfun.tools.dao.util.Table;
 import com.tonfun.tools.helper.FileOperator;
@@ -46,19 +48,23 @@ public class FileGeneratorFactory {
 	/**
 	 * ========================================================================================
 	 * getFileGenerator:根据产生的文件类型返回相应的实现类 
-	 * @param generatorType
-	 * @param tables
+	 * @param generatorType  产生文件的类型，如model类型、dao层中的接口和实现类或者service层的接口或实现类
+	 * @param tables  产生的文件中对应的所有表的结构信息
 	 * @return
 	 * =======================================================================================
 	 */
 	public static FileGeneratorModel getFileGenerator(FileGeneratorType generatorType,Set<Table> tables) {
 		FileGeneratorInterface fileGeneratorInterface = null;
-		if (generatorType==FileGeneratorType.Model) {
+		if (generatorType==FileGeneratorType.Model) {  // 获取产生实体类型的文件所对应的处理类
 			fileGeneratorInterface = new GenerateModelJavaFile(tables);			
-		}else if (generatorType==FileGeneratorType.DaoInterface) {
+		}else if (generatorType==FileGeneratorType.DaoInterface) { // 获取产生dao层接口类型的文件所对应的处理类
 			fileGeneratorInterface = new GenerateDaoInterfaceFile();
-		}else if (generatorType==FileGeneratorType.DaoImpl) {
+		}else if (generatorType==FileGeneratorType.DaoImpl) { // 获取产生dao层实现类型的文件所对应的处理类
 			fileGeneratorInterface = new GenerateDaoJavaFile();
+		}else if (generatorType==FileGeneratorType.ServiceInterface) { // 获取产生service层接口类型的文件所对应的处理类
+			fileGeneratorInterface = new GenerateServiceInterfaceFile();
+		}else if (generatorType==FileGeneratorType.ServiceImpl) { // 获取产生service层实现类类型的文件所对应的处理类
+			fileGeneratorInterface = new GenerateServiceImplFile();
 		}
 		fileOperator.setPackageName(Optional.of(XmlParserFactory.getXmlParser().xmlParser(generatorType)));
 		FileGeneratorModel fileGeneratorModel = new FileGeneratorModel(fileGeneratorInterface, fileOperator);
