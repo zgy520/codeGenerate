@@ -71,7 +71,7 @@ public class GenerateServiceInterfaceFile implements FileGeneratorInterface {
 	 */
 	public void outputPackage(PrintWriter printWriter,String modelName) {
 		printWriter.println("\r\nimport com.tonfun.tools.service.I.module.sys.IGenericSysService;"
-				+ "\r\nimport "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.Model)+"."+modelName+";\r\n");
+				+ "\r\nimport "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.Model,"packageName")+"."+modelName+";\r\n");
 	}
 
 }

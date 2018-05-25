@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 
 /** ========================================================================================
  * @author a4423
- * 
+ * 通过该类，可以设置与输出文件相关的一些信息，如产生文件最终的输出目录，产生文件的包名等信息
  * =======================================================================================*/
 public class FileOperator {
 	private final static String srcPath = "src\\main\\java";  // 设置中间目录，默认为此，即java目录结构的实际情况
@@ -37,6 +37,8 @@ public class FileOperator {
 	private Optional<String> packageName;  //包名
 	private final OutputStyle outputStyle;
 	private String package_Name;
+	private String prefixName;  //产生文件的前缀名
+	private String suffixName;  // 产生文件的后缀名
 	/**
 	 * ========================================================================================
 	 * 默认构造函数
@@ -53,6 +55,17 @@ public class FileOperator {
 	 */
 	public FileOperator(OutputStyle outputStyle) {			
 		this.outputStyle = outputStyle;			
+	}
+	/**
+	 * ========================================================================================
+	 * 构造函数 根据输出风格和文件的后缀名构造配置文件信息
+	 * @param outputStyle
+	 * @param suffixName
+	 * =======================================================================================
+	 */
+	public FileOperator(OutputStyle outputStyle,String suffixName) {
+		this.outputStyle = outputStyle;
+		this.suffixName = suffixName;
 	}
 	/**
 	 * ========================================================================================
@@ -167,6 +180,26 @@ public class FileOperator {
 	 * =======================================================================================*/
 	public String getPackage_Name() {
 		return package_Name;
+	}
+	/** ========================================================================================
+	 * getSuffixName: 
+	 * @return suffixName
+	 * =======================================================================================*/
+	public String getSuffixName() {
+		return suffixName;
+	}
+	/** ========================================================================================
+	 * setSuffixName: 
+	 * @param suffixName 要设置的 suffixName
+	 * =======================================================================================*/
+	public void setSuffixName(String suffixName) {
+		this.suffixName = suffixName;
+	}
+	public String getPrefixName() {
+		return prefixName;
+	}
+	public void setPrefixName(String prefixName) {
+		this.prefixName = prefixName;
 	}
 	
 	

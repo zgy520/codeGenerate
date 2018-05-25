@@ -85,8 +85,8 @@ public class GenerateServiceImplFile implements FileGeneratorInterface {
 	private void outputPackage(PrintWriter printWriter,String model) {
 		printWriter.println("\r\n\r\nimport org.springframework.stereotype.Service;\r\n" + 
 				"import com.tonfun.tools.service.C.module.sys.CGenericSysImpl;\r\n" + 				
-				"import "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.Model)+"."+model+";\r\n"+
-				"import "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.ServiceInterface)+".I"+model+"Service;\r\n");
+				"import "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.Model,"packageName")+"."+model+";\r\n"+
+				"import "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.ServiceInterface,"packageName")+".I"+model+"Service;\r\n");
 		printWriter.println("\r\n");
 	};
 

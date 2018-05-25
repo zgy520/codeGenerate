@@ -26,5 +26,5 @@ import com.tonfun.tools.File.FileGeneratorType;
  * 
  * =======================================================================================*/
 public interface IXmlParser {
-	String xmlParser(FileGeneratorType fileGeneratorType);  // xml文件解析器
+	String xmlParser(FileGeneratorType fileGeneratorType,String elementType);  // xml文件解析器
 }

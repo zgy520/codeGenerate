@@ -19,17 +19,17 @@
 **------------------------------------------------------------------------------------------------*/
 package com.tonfun.tools.File;
 
-import com.tonfun.tools.File.I.FileGeneratorInterface;
+import com.tonfun.tools.File.I.IGenericFileGenerator;
 import com.tonfun.tools.helper.FileOperator;
 
 /** ========================================================================================
  * @author a4423
  * 构造一个实体类，用于记录文件产生器类和FileOperator(文件产生的基本信息）
  * =======================================================================================*/
-public class FileGeneratorModel {
-	private FileGeneratorInterface fileGeneratorInterface;
+public class FileGeneratorModel2 {
+	private IGenericFileGenerator fileGeneratorInterface;
 	private FileOperator fileOperator;
-	public FileGeneratorModel(FileGeneratorInterface fileGeneratorInterface,FileOperator fileOperator) {
+	public FileGeneratorModel2(IGenericFileGenerator fileGeneratorInterface,FileOperator fileOperator) {
 		this.fileGeneratorInterface = fileGeneratorInterface;
 		this.fileOperator = fileOperator;
 	}
@@ -37,14 +37,14 @@ public class FileGeneratorModel {
 	 * getFileGeneratorInterface: 
 	 * @return fileGeneratorInterface
 	 * =======================================================================================*/
-	public FileGeneratorInterface getFileGeneratorInterface() {
+	public IGenericFileGenerator getFileGeneratorInterface() {
 		return fileGeneratorInterface;
 	}
 	/** ========================================================================================
 	 * setFileGeneratorInterface: 
 	 * @param fileGeneratorInterface 要设置的 fileGeneratorInterface
 	 * =======================================================================================*/
-	public void setFileGeneratorInterface(FileGeneratorInterface fileGeneratorInterface) {
+	public void setFileGeneratorInterface(IGenericFileGenerator fileGeneratorInterface) {
 		this.fileGeneratorInterface = fileGeneratorInterface;
 	}
 	/** ========================================================================================

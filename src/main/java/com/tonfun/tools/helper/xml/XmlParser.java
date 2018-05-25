@@ -51,7 +51,7 @@ public class XmlParser implements IXmlParser {
 	 * @see com.tonfun.tools.helper.xml.IXmlParser#xmlParser()
 	 * =======================================================================================*/
 	@Override
-	public String xmlParser(FileGeneratorType fileGeneratorType) {
+	public String xmlParser(FileGeneratorType fileGeneratorType,String elementType) {
 		// TODO Auto-generated method stub
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder;
@@ -59,7 +59,7 @@ public class XmlParser implements IXmlParser {
 			dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(this.xmlFile);
 			doc.getDocumentElement().normalize();			
-			Node node = doc.getElementsByTagName("packageName").item(0); // 暂时仅仅获取xml中packageName下的节点	
+			Node node = doc.getElementsByTagName(elementType).item(0); // 暂时仅仅获取xml中packageName下的节点	
 			return parseNode(node,fileGeneratorType);						
 		}catch (SAXException | ParserConfigurationException | IOException e) {
 			// TODO: handle exception

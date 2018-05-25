@@ -12,21 +12,19 @@
 ** Copyright 2011-2018 天津同丰信息技术有限公司保留所有权利。
 **--------------------------------------------------------------------------------------------------
 **
-**  文件名: FileGeneratorInterface.java
+**  文件名: IGenericFileGenerator.java
 **  描  述: 
 **  作  者: a4423
-**  时  间: 2018年4月26日 下午9:09:30
+**  时  间: 2018年5月23日 下午9:44:36
 **------------------------------------------------------------------------------------------------*/
 package com.tonfun.tools.File.I;
 
 import com.tonfun.tools.Error.ErrorCode;
-import com.tonfun.tools.dao.util.Table;
-import com.tonfun.tools.helper.FileOperator;
 
 /** ========================================================================================
  * @author a4423
  * 
  * =======================================================================================*/
-public interface FileGeneratorInterface {
-	public ErrorCode generateCodeFile(Table table,FileOperator file);  //创建文件	
+public interface IGenericFileGenerator {
+	public ErrorCode fileGenerator();  // 文件产生器
 }
