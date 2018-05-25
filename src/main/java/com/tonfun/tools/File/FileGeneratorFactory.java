@@ -22,10 +22,12 @@ package com.tonfun.tools.File;
 import java.util.Optional;
 import java.util.Set;
 
-import com.tonfun.tools.File.C.GenerateDaoJavaFile;
-import com.tonfun.tools.File.C.GenerateServiceImplFile;
-import com.tonfun.tools.File.C.GenerateServiceInterfaceFile;
-import com.tonfun.tools.File.I.FileGeneratorInterface;
+import com.tonfun.tools.File.C.GenerateDaoIFile;
+import com.tonfun.tools.File.C.GenerateDaoImplFile;
+import com.tonfun.tools.File.C.GenerateModelFile;
+import com.tonfun.tools.File.C.GenerateServiceIFile;
+import com.tonfun.tools.File.C.GenerateServiceImpl;
+import com.tonfun.tools.File.I.IGenericFileGenerator;
 import com.tonfun.tools.dao.util.Table;
 import com.tonfun.tools.helper.FileOperator;
 import com.tonfun.tools.helper.OutputStyle;
@@ -51,21 +53,25 @@ public class FileGeneratorFactory {
 	 * @return
 	 * =======================================================================================
 	 */
-	public static FileGeneratorModel getFileGenerator(FileGeneratorType generatorType,Set<Table> tables) {
-		FileGeneratorInterface fileGeneratorInterface = null;
-		if (generatorType==FileGeneratorType.Model) {  // 获取产生实体类型的文件所对应的处理类
-			//fileGeneratorInterface = new GenerateModelJavaFile(tables);			
-		}else if (generatorType==FileGeneratorType.DaoInterface) { // 获取产生dao层接口类型的文件所对应的处理类
-			//fileGeneratorInterface = new GenerateDaoInterfaceFile();
-		}else if (generatorType==FileGeneratorType.DaoImpl) { // 获取产生dao层实现类型的文件所对应的处理类
-			fileGeneratorInterface = new GenerateDaoJavaFile();
-		}else if (generatorType==FileGeneratorType.ServiceInterface) { // 获取产生service层接口类型的文件所对应的处理类
-			fileGeneratorInterface = new GenerateServiceInterfaceFile();
-		}else if (generatorType==FileGeneratorType.ServiceImpl) { // 获取产生service层实现类类型的文件所对应的处理类
-			fileGeneratorInterface = new GenerateServiceImplFile();
-		}
+	public static IGenericFileGenerator getFileGenerator(FileGeneratorType generatorType,Set<Table> tables) {
+		IGenericFileGenerator iGenericFileGenerator = null;
 		fileOperator.setPackageName(Optional.of(XmlParserFactory.getXmlParser().xmlParser(generatorType,"packageName")));
-		FileGeneratorModel fileGeneratorModel = new FileGeneratorModel(fileGeneratorInterface, fileOperator);
-		return fileGeneratorModel;
+		//String suffixName = XmlParserFactory.getXmlParser().xmlParser(generatorType, "suffix");
+		//System.out.println("获取到suffixName为:"+suffixName);
+		fileOperator.setSuffixName(XmlParserFactory.getXmlParser().xmlParser(generatorType, "suffix"));
+		fileOperator.setPrefixName(XmlParserFactory.getXmlParser().xmlParser(generatorType, "prefix"));
+		if (generatorType==FileGeneratorType.Model) {  // 获取产生实体类型的文件所对应的处理类
+			iGenericFileGenerator = new GenerateModelFile(tables,fileOperator);			
+		}else if (generatorType==FileGeneratorType.DaoInterface) { // 获取产生dao层接口类型的文件所对应的处理类
+			iGenericFileGenerator = new GenerateDaoIFile(tables,fileOperator);
+		}else if (generatorType==FileGeneratorType.DaoImpl) { // 获取产生dao层实现类型的文件所对应的处理类
+			iGenericFileGenerator = new GenerateDaoImplFile(tables, fileOperator);
+		}else if (generatorType==FileGeneratorType.ServiceInterface) { // 获取产生service层接口类型的文件所对应的处理类
+			iGenericFileGenerator = new GenerateServiceIFile(tables, fileOperator);
+		}else if (generatorType==FileGeneratorType.ServiceImpl) { // 获取产生service层实现类类型的文件所对应的处理类
+			iGenericFileGenerator = new GenerateServiceImpl(tables, fileOperator);
+		}
+		
+		return iGenericFileGenerator;
 	}
 }

@@ -7,7 +7,6 @@ import com.tonfun.tools.dao.util.Table;
 import com.tonfun.tools.helper.FileOperator;
 import com.tonfun.tools.helper.Utils;
 import com.tonfun.tools.helper.xml.XmlParserFactory;
-import com.tonfun.tools.indepent.TypeConvetor.TypeConvert;
 import com.tonfun.tools.indepent.TypeConvetor.TypeConvertBetweenMySQLAndJava;
 
 /**
@@ -31,7 +30,7 @@ public class GenerateServiceIFile extends GenerateJavaFile {
 	protected void outputClassName(String tableName) {
 		// TODO Auto-generated method stub
 		String modelName = com.tonfun.tools.helper.Utils.captureName(this.curOperateTable.getTableName());
-		printWriter.println("public interface I"+Utils.captureName(this.curOperateTable.getTableName())+"Service" +
+		printWriter.println("public interface "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.ServiceInterface,"prefix")+Utils.captureName(this.curOperateTable.getTableName())+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.ServiceInterface,"suffix")+
 				" extends IGenericSysService<"+modelName+", Long> " +
 				"{\r\n");
 	}

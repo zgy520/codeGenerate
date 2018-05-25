@@ -7,7 +7,6 @@ import com.tonfun.tools.dao.util.Table;
 import com.tonfun.tools.helper.FileOperator;
 import com.tonfun.tools.helper.Utils;
 import com.tonfun.tools.helper.xml.XmlParserFactory;
-import com.tonfun.tools.indepent.TypeConvetor.TypeConvert;
 import com.tonfun.tools.indepent.TypeConvetor.TypeConvertBetweenMySQLAndJava;
 
 /**
@@ -31,8 +30,8 @@ public class GenerateServiceImpl extends GenerateJavaFile {
 	protected void outputClassName(String tableName) {
 		// TODO Auto-generated method stub
 		String modelName = com.tonfun.tools.helper.Utils.captureName(this.curOperateTable.getTableName());
-		printWriter.println("public class "+Utils.captureName(this.curOperateTable.getTableName())+"ServiceImpl" +
-				" extends CGenericSysImpl<"+modelName+", Long> " + "implements I"+Utils.captureName(this.curOperateTable.getTableName())+"Service "+
+		printWriter.println("public class "+Utils.captureName(this.curOperateTable.getTableName())+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.ServiceImpl,"suffix") +
+				" extends CGenericSysImpl<"+modelName+", Long> " + "implements "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.ServiceInterface,"prefix")+Utils.captureName(this.curOperateTable.getTableName())+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.ServiceInterface,"suffix")+" "+
 				"{\r\n");
 	}
 
@@ -50,7 +49,9 @@ public class GenerateServiceImpl extends GenerateJavaFile {
 		printWriter.println("\r\n\r\nimport org.springframework.stereotype.Service;\r\n" + 
 				"import com.tonfun.tools.service.C.module.sys.CGenericSysImpl;\r\n" + 				
 				"import "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.Model,"packageName")+"."+model+";\r\n"+
-				"import "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.ServiceInterface,"packageName")+".I"+model+"Service;\r\n");
+				"import "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.ServiceInterface,"packageName")+"."+
+						  XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.ServiceInterface,"prefix")+
+						  model+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.ServiceInterface,"suffix")+";\r\n");
 		printWriter.println("\r\n");
 	}
 

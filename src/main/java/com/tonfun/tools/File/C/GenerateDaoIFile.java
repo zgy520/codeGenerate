@@ -42,7 +42,9 @@ public class GenerateDaoIFile extends GenerateJavaFile {
 	@Override
 	protected void outputClassName(String tableName) {
 		// TODO Auto-generated method stub
-		printWriter.println("public interface I"+Utils.captureName(this.curOperateTable.getTableName())+"Dao" +
+		printWriter.println("public interface "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.DaoInterface,"prefix")+
+					Utils.captureName(this.curOperateTable.getTableName())+
+					XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.DaoInterface,"suffix")+
 				" extends ISystemGenericDao<"+Utils.captureName(this.curOperateTable.getTableName())+", Long> " +
 				"{\r\n");  //产生类名
 	}

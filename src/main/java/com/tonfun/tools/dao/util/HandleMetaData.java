@@ -19,27 +19,16 @@
 **------------------------------------------------------------------------------------------------*/
 package com.tonfun.tools.dao.util;
 
-import java.io.IOException;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import com.tonfun.tools.File.FileGeneratorFactory;
-import com.tonfun.tools.File.FileGeneratorFactory2;
-import com.tonfun.tools.File.FileGeneratorModel;
-import com.tonfun.tools.File.FileGeneratorModel2;
 import com.tonfun.tools.File.FileGeneratorType;
-import com.tonfun.tools.File.C.GenerateDaoJavaFile;
-import com.tonfun.tools.File.C.GenerateJavaFile;
-import com.tonfun.tools.File.C.GenerateModelFile;
-import com.tonfun.tools.File.I.FileGeneratorInterface;
 import com.tonfun.tools.File.I.IGenericFileGenerator;
-import com.tonfun.tools.helper.FileOperator;
-import com.tonfun.tools.helper.OutputStyle;
 
 /** ========================================================================================
  * @author a4423
@@ -63,111 +52,23 @@ public class HandleMetaData {
 		Set<ForeginKey> foreginKeys = this.queryForeginInfo(schameName);
 		DatabaseMeta databaseMeta = new DatabaseMeta(tables, foreginKeys);	
 		tables = databaseMeta.updateTableWithForegin();  // 更新表中的外键信息
-		//this.generateRelatedFiles(tables);  // 创建相应的文件
 		
-		this.testGenericJavaFile(tables);
-		
-		/*FileOperator fileOperator = new FileOperator(OutputStyle.Default);		
-		fileOperator.setPackageName(Optional.of("com.tonfun.tools.model"));		
-		//产生实体类文件
-		generateModel(databaseMeta.updateTableWithForegin(), fileOperator);		
-		
-		// 产生Interface文件
-		
-		fileOperator.setPackageName(Optional.of("com.tonfun.tools.dao.test.I"));
-		generateInterfaceClass(tables, fileOperator);
-		
-		// 产生Dao文件		
-		fileOperator.setPackageName(Optional.of("com.tonfun.tools.dao.test.C"));		
-		generateDaoClass(databaseMeta.getTables(), fileOperator);*/
-		
-	
-		
+		this.generateFiles(tables);
 	}
 	
-	private void testGenericJavaFile(Set<Table> tables) {
-		//FileOperator fileOperator = new FileOperator(OutputStyle.Default);
-		/*fileOperator.setSuffixName("");
-		fileOperator.setPackageName(Optional.of("com.tonfun.tools.Model"));
-		GenerateJavaFile generateJavaFile = new GenerateModelFile(tables, fileOperator);
-		generateJavaFile.fileGenerator();*/
+	/**
+	 * 产生根据表java相关的文件
+	 * @param tables
+	 */
+	private void generateFiles(Set<Table> tables) {
 		
 		EnumSet.allOf(FileGeneratorType.class)
 				.forEach(generatorType->{
-					IGenericFileGenerator iGenericFileGenerator = FileGeneratorFactory2.getFileGenerator(generatorType, tables);
+					IGenericFileGenerator iGenericFileGenerator = FileGeneratorFactory.getFileGenerator(generatorType, tables);
 					if (iGenericFileGenerator!=null) {
 						iGenericFileGenerator.fileGenerator();
 					}
 				});
-	}
-	
-	/**
-	 * ========================================================================================
-	 * generateRelatedFiles: 根据数据库中的表信息，创建需要的各类文件
-	 * @param tables
-	 * =======================================================================================
-	 */
-	private void generateRelatedFiles(Set<Table> tables) {
-		EnumSet.allOf(FileGeneratorType.class)
-				.forEach(generateType->{  // 对枚举进行遍历					
-					FileGeneratorModel fileGeneratorModel = FileGeneratorFactory.getFileGenerator(generateType, tables);
-					for(Table table : tables) {
-						if (table.isCreatedFile()) {
-							fileGeneratorModel.getFileGeneratorInterface().generateCodeFile(table, fileGeneratorModel.getFileOperator());
-						}
-					}
-				});
-	}
-	
-	
-	/**
-	 * ========================================================================================
-	 * generateInterfaceClass:产生接口dao 
-	 * @param tables
-	 * @param fileOperator
-	 * =======================================================================================
-	 */
-	private void generateInterfaceClass(Set<Table> tables,FileOperator fileOperator) {
-		/*FileGeneratorInterface fileGeneratorInterface = new GenerateDaoInterfaceFile();
-		for(Table table : tables) {
-			if (table.isCreatedFile()) {
-				fileGeneratorInterface.generateCodeFile(table, fileOperator);
-			}
-		}*/
-	}
-	/**
-	 * ========================================================================================
-	 * generateDaoClass: 产生dao层中的相关dao类
-	 * @param tables
-	 * @param fileOperator
-	 * =======================================================================================
-	 */
-	private void generateDaoClass(Set<Table> tables,FileOperator fileOperator) {
-		FileGeneratorInterface fileGeneratorInterface = new GenerateDaoJavaFile();
-		for(Table table : tables) {
-			if (table.isCreatedFile()) {
-				fileGeneratorInterface.generateCodeFile(table, fileOperator);
-			}			
-		}
-	}
-	
-	/**
-	 * ========================================================================================
-	 * generateModel: 产生实体类 
-	 * @param tables
-	 * @param outputDir
-	 * @throws IOException
-	 * =======================================================================================
-	 */
-	private void generateModel(Set<Table> tables,FileOperator outputDir) throws IOException {
-				
-		/*FileGeneratorInterface fileGenerator = new GenerateModelJavaFile(tables);
-		for(Table table : tables) {
-			if (table.isCreatedFile()) {
-				fileGenerator.generateCodeFile(table,outputDir);
-			}		
-		}*/
-		//fileGenerator.generateCodeFile(table, outputDir);			
 	}
 	
 	/**

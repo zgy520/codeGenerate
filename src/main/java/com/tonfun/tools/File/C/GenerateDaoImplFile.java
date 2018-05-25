@@ -7,7 +7,6 @@ import com.tonfun.tools.dao.util.Table;
 import com.tonfun.tools.helper.FileOperator;
 import com.tonfun.tools.helper.Utils;
 import com.tonfun.tools.helper.xml.XmlParserFactory;
-import com.tonfun.tools.indepent.TypeConvetor.TypeConvert;
 import com.tonfun.tools.indepent.TypeConvetor.TypeConvertBetweenMySQLAndJava;
 
 /**
@@ -30,8 +29,12 @@ public class GenerateDaoImplFile extends GenerateJavaFile {
 	@Override
 	protected void outputClassName(String tableName) {
 		// TODO Auto-generated method stub
-		printWriter.println("public class "+Utils.captureName(this.curOperateTable.getTableName())+"DaoImpl" +
-				" extends SystemGenericDao<"+Utils.captureName(this.curOperateTable.getTableName())+", Long> " + "implements I"+Utils.captureName(this.curOperateTable.getTableName())+"Dao "+
+		printWriter.println("public class "+Utils.captureName(this.curOperateTable.getTableName())+
+				XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.DaoImpl,"suffix")+
+				" extends SystemGenericDao<"+Utils.captureName(this.curOperateTable.getTableName())+", Long> " + "implements "+
+				XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.DaoInterface,"prefix")
+				+Utils.captureName(this.curOperateTable.getTableName()) +
+				XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.DaoInterface,"suffix")+" "+
 				"{\r\n");  //产生类名
 	}
 
@@ -48,7 +51,9 @@ public class GenerateDaoImplFile extends GenerateJavaFile {
 		this.printWriter.println("\r\n\r\nimport org.springframework.stereotype.Repository;\r\n" + 
 				"import com.tonfun.tools.dao.persistence.realisation.module.sys.SystemGenericDao;\r\n" + 				
 				"import "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.Model,"packageName")+"."+model+";\r\n"+
-				"import "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.DaoInterface,"packageName")+".I"+model+"Dao;\r\n");
+				"import "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.DaoInterface,"packageName")+"."+
+					      XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.DaoInterface,"prefix")+
+					model+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.DaoInterface,"suffix")+";\r\n");
 		this.printWriter.println("\r\n");
 	}
 
