@@ -201,6 +201,4 @@ public class FileOperator {
 	public void setPrefixName(String prefixName) {
 		this.prefixName = prefixName;
 	}
-	
-	
 }
