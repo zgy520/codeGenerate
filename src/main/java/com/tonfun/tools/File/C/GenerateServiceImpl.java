@@ -5,7 +5,6 @@ import java.util.Set;
 import com.tonfun.tools.File.FileGeneratorType;
 import com.tonfun.tools.dao.util.Table;
 import com.tonfun.tools.helper.FileOperator;
-import com.tonfun.tools.helper.Utils;
 import com.tonfun.tools.helper.xml.XmlParserFactory;
 import com.tonfun.tools.indepent.TypeConvetor.TypeConvertBetweenMySQLAndJava;
 
@@ -29,14 +28,17 @@ public class GenerateServiceImpl extends GenerateJavaFile {
 	@Override
 	protected void outputClassName(String tableName) {
 		// TODO Auto-generated method stub
-		String modelName = com.tonfun.tools.helper.Utils.captureName(this.curOperateTable.getTableName());
-		printWriter.println("public class "+Utils.captureName(this.curOperateTable.getTableName())+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.ServiceImpl,"suffix") +
-				" extends CGenericSysImpl<"+modelName+", Long> " + "implements "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.ServiceInterface,"prefix")+Utils.captureName(this.curOperateTable.getTableName())+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.ServiceInterface,"suffix")+" "+
+		String modelName = this.getCaptureTableName();
+		printWriter.println("public class "+modelName+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.ServiceImpl,"suffix") +
+				" extends CGenericSysImpl<"+modelName+", Long> " + "implements "+
+				XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.ServiceInterface,"prefix")+
+				modelName+
+				XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.ServiceInterface,"suffix")+" "+
 				"{\r\n");
 	}
 
 	@Override
-	protected void outputClassContent(Table table) {
+	protected void outputClassContent() {
 		// TODO Auto-generated method stub
 
 	}
@@ -45,7 +47,7 @@ public class GenerateServiceImpl extends GenerateJavaFile {
 	protected void outputReferencePackgaes() {
 		// TODO Auto-generated method stub
 		super.outputReferencePackgaes();
-		String model = com.tonfun.tools.helper.Utils.captureName(this.curOperateTable.getTableName());
+		String model = this.getCaptureTableName();
 		printWriter.println("\r\n\r\nimport org.springframework.stereotype.Service;\r\n" + 
 				"import com.tonfun.tools.service.C.module.sys.CGenericSysImpl;\r\n" + 				
 				"import "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.Model,"packageName")+"."+model+";\r\n"+

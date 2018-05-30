@@ -38,10 +38,17 @@ import com.tonfun.tools.helper.xml.XmlParserFactory;
  * 文件产生工厂
  * =======================================================================================*/
 public class FileGeneratorFactory {
-	private static FileOperator fileOperator;	
+	private static FileOperator fileOperator;
+	/**
+	 * 初始化为默认的
+	 */
 	static {
 		fileOperator = new FileOperator(OutputStyle.Default);		
 	}
+	/**
+	 * 设置文件的输出风格
+	 * @param outputStyle
+	 */
 	public void setFileOperator(OutputStyle outputStyle) {
 		fileOperator = new FileOperator(outputStyle);
 	}	

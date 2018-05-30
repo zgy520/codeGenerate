@@ -5,7 +5,6 @@ import java.util.Set;
 import com.tonfun.tools.File.FileGeneratorType;
 import com.tonfun.tools.dao.util.Table;
 import com.tonfun.tools.helper.FileOperator;
-import com.tonfun.tools.helper.Utils;
 import com.tonfun.tools.helper.xml.XmlParserFactory;
 import com.tonfun.tools.indepent.TypeConvetor.TypeConvertBetweenMySQLAndJava;
 
@@ -29,17 +28,17 @@ public class GenerateDaoImplFile extends GenerateJavaFile {
 	@Override
 	protected void outputClassName(String tableName) {
 		// TODO Auto-generated method stub
-		printWriter.println("public class "+Utils.captureName(this.curOperateTable.getTableName())+
+		printWriter.println("public class "+this.getCaptureTableName()+
 				XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.DaoImpl,"suffix")+
-				" extends SystemGenericDao<"+Utils.captureName(this.curOperateTable.getTableName())+", Long> " + "implements "+
+				" extends SystemGenericDao<"+this.getCaptureTableName()+", Long> " + "implements "+
 				XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.DaoInterface,"prefix")
-				+Utils.captureName(this.curOperateTable.getTableName()) +
+				+ this.getCaptureTableName() +
 				XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.DaoInterface,"suffix")+" "+
 				"{\r\n");  //产生类名
 	}
 
 	@Override
-	protected void outputClassContent(Table table) {
+	protected void outputClassContent() {
 		// TODO Auto-generated method stub
 
 	}
@@ -47,14 +46,12 @@ public class GenerateDaoImplFile extends GenerateJavaFile {
 	protected void outputReferencePackgaes() {
 		// TODO Auto-generated method stub
 		super.outputReferencePackgaes();
-		String model = com.tonfun.tools.helper.Utils.captureName(this.curOperateTable.getTableName());
 		this.printWriter.println("\r\n\r\nimport org.springframework.stereotype.Repository;\r\n" + 
 				"import com.tonfun.tools.dao.persistence.realisation.module.sys.SystemGenericDao;\r\n" + 				
-				"import "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.Model,"packageName")+"."+model+";\r\n"+
+				"import "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.Model,"packageName")+"."+this.getCaptureTableName()+";\r\n"+
 				"import "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.DaoInterface,"packageName")+"."+
 					      XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.DaoInterface,"prefix")+
-					model+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.DaoInterface,"suffix")+";\r\n");
+					      this.getCaptureTableName()+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.DaoInterface,"suffix")+";\r\n");
 		this.printWriter.println("\r\n");
 	}
-
 }

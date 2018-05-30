@@ -20,7 +20,6 @@
 package com.tonfun.tools.File.C;
 
 import java.io.PrintWriter;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Set;
 
@@ -97,8 +96,9 @@ public class GenerateModelFile extends GenerateJavaFile {
 	 * @see com.tonfun.tools.File.C.GenerateJavaFile#outputClassContent(com.tonfun.tools.dao.util.Table)
 	 * =======================================================================================*/
 	@Override
-	protected void outputClassContent(Table table) {
+	protected void outputClassContent() {
 		// TODO Auto-generated method stub
+		Table table = this.curOperateTable;
 		Set<Column> columns = table.getColumns();
 		columns.stream().sorted(Comparator.comparing(Column::getSerial))
 				.forEach(column->{
@@ -120,6 +120,12 @@ public class GenerateModelFile extends GenerateJavaFile {
 		generateFieldMethods(columns, printWriter);
 		// 产生关系实体的get和set方法
 		generateGetAndSetForRelationField(table, printWriter);
+		// 产生toString方法
+		this.outputStrMethod();
+		// 产生静态字段
+		this.outputStaticFields();
+		this.outputEqualsMethod();
+		this.outputHashCode();
 	}
 	
 	/**
@@ -250,9 +256,6 @@ public class GenerateModelFile extends GenerateJavaFile {
 		
 	}
 
-	/*public Set<Table> getTables() {
-		return Collections.unmodifiableSet(tables);
-	}*/
 	/**
 	 * 查看表中的主键数量，主键数量为1则返回true,主键数量超过1则返回false
 	 * @param table
@@ -267,5 +270,81 @@ public class GenerateModelFile extends GenerateJavaFile {
 		// TODO Auto-generated method stub
 		this.printWriter.println("public class "+Utils.captureName(tableName)+"{");
 	}
+	/**
+	 * 重载toString方法
+	 */
+	private void outputStrMethod() {
+		this.printWriter.println("  @Override");
+		this.printWriter.println("  public String toString() {");
+		this.outputStringMethodContent();
+		this.printWriter.println("  }");
+	}
+	/**
+	 * 重载equals方法
+	 */
+	private void outputEqualsMethod() {
+		this.printWriter.println("  @Override");
+		this.printWriter.println("  public boolean equals(Object o) {");
+		this.printWriter.println("    if(this == o) return true;");
+		this.printWriter.println("    if(!(o instanceof "+this.getCaptureTableName()+")) return false;");
+		this.printWriter.println("    "+this.getCaptureTableName() +" "+this.getTableName() + "= ("+this.getCaptureTableName()+")o;");
+		String id = this.curOperateTable.getColumns().stream().filter(colum->colum.isPrimaryKey()).map(Column::getColumnName).findFirst().get();
+		this.printWriter.println("    return "+id+"!= null && "+id+".equals("+this.getTableName()+"."+id+");");
+		this.printWriter.println("  }");
+	}
+	/**
+	 * 重载hashCode方法
+	 */
+	private void outputHashCode() {
+		this.printWriter.println("  @Override");
+		this.printWriter.println("  public int hashCode() {");
+		this.printWriter.println("    return 31;");
+		this.printWriter.println("  }");
+	}
+	
+	//todo 以上重载的toString,toEquals和HashCode方法可以进行重构
+	//重构时，可将重复性的代码进行合并，统一处理，后续进行修改
+	
+	/**
+	 * 输出toString方法的内容
+	 */
+	private void outputStringMethodContent() {
+		StringBuilder paramBuilder = new StringBuilder();
+		paramBuilder.append("\"");
+		StringBuilder valueBuilder = new StringBuilder();
+		Table table = this.curOperateTable;
+		Set<Column> columns = table.getColumns();
+		columns.stream().sorted(Comparator.comparing(Column::getSerial))
+				.forEach(column->{
+					if (!column.isForeginKey()) {
+						paramBuilder.append(column.getColumnName()+"=%s,");
+						valueBuilder.append("this."+column.getColumnName()+",");
+					}
+					
+				});
+		this.printWriter.println("    return String.format("+paramBuilder.toString().substring(0, paramBuilder.length() - 1)+"\","+ valueBuilder.toString().substring(0,valueBuilder.toString().length() - 1)+");");
+	}
+	/**
+	 * 输出静态字段
+	 */
+	private void outputStaticFields() {
+		Table table = this.curOperateTable;
+		Set<Column> columns = table.getColumns();
+		columns.stream().sorted(Comparator.comparing(Column::getSerial))
+				.forEach(column->{
+					if (!column.isForeginKey()) {
+						this.printWriter.println("  private final static String FIELD_"+
+							column.getColumnName().toUpperCase() + "=\""+
+							column.getColumnName()+"\";");
+						this.printWriter.println("  public static String getField"+column.getColumnName()+
+												"() {");
+						this.printWriter.println("    return FIELD_"+column.getColumnName().toUpperCase()+";");
+						this.printWriter.println("  }\r\n");
+					}
+					
+				});	
+	}
+	
+	
 
 }

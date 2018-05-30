@@ -41,6 +41,8 @@ public abstract class GenerateJavaFile implements IGenericFileGenerator {
 	protected FileOperator fileOperator;  // 输出文件的配置类
 	protected PrintWriter printWriter;  // 输出日志文件
 	protected Table curOperateTable;  // 当前正在处理的文件所对应的表
+	private String tableName;  //表名
+	private String captureTableName;  //转化后的类名
 	
 	/**
 	 * ========================================================================================
@@ -72,6 +74,8 @@ public abstract class GenerateJavaFile implements IGenericFileGenerator {
 					continue;
 				}
 				this.curOperateTable = table;
+				this.tableName = table.getTableName();  // 设置表名
+				this.captureTableName = Utils.captureName(this.tableName); // 设置转换后的类名
 				//2. 产生包名
 				this.outputPacakgeName();
 				// 3. 输出引用的包名
@@ -81,7 +85,7 @@ public abstract class GenerateJavaFile implements IGenericFileGenerator {
 				//5. 输出类名
 				this.outputClassName(table.getTableName());
 				//6. 产生文件的内容
-				this.outputClassContent(table);
+				this.outputClassContent();
 				//7. 类文件结束符
 				this.outputClassEndingOperator();
 				//8. 关闭文件写入对象
@@ -151,7 +155,7 @@ public abstract class GenerateJavaFile implements IGenericFileGenerator {
 	 * @param table
 	 * =======================================================================================
 	 */
-	protected abstract void outputClassContent(Table table);
+	protected abstract void outputClassContent();
 	/**
 	 * ========================================================================================
 	 * outputClassEndingOperator: 输出结尾符
@@ -167,5 +171,13 @@ public abstract class GenerateJavaFile implements IGenericFileGenerator {
 	 */
 	private void closePrintWriter() {
 		this.printWriter.close();
+	}
+
+	protected String getTableName() {
+		return tableName;
+	}
+
+	protected String getCaptureTableName() {
+		return captureTableName;
 	}
 }
