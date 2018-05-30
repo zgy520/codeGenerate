@@ -37,22 +37,20 @@ public class HelloController {
 	private final static Logger LOGGER = LoggerFactory.getLogger(HelloController.class);
 	@Autowired
 	DataBaseRepository databaseRepository;
+	/*@Autowired
+	IPositionService postionService;*/
 	
 	
 	@RequestMapping("/")
 	public String index() throws Exception {
-		LOGGER.debug("This is a debug message");
-		LOGGER.info("测试Logger");
-		LOGGER.warn("this is a warn message");
-		LOGGER.error("This is a error Message");
-		//databaseRepository.getMeta();
+
+		databaseRepository.getMeta();
 		
 		return "Greetings from Spring boot!";
 	}
 	@RequestMapping("/prod")
 	public String getProd() {
 		
-		return "获取到的产品名称为:";
-		
+		return "获取到的产品名称为:";		
 	}
 }
