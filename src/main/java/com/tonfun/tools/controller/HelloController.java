@@ -19,6 +19,8 @@
 **------------------------------------------------------------------------------------------------*/
 package com.tonfun.tools.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,13 +34,18 @@ import com.tonfun.tools.dao.DataBaseRepository;
  * =======================================================================================*/
 @RestController
 public class HelloController {
+	private final static Logger LOGGER = LoggerFactory.getLogger(HelloController.class);
 	@Autowired
 	DataBaseRepository databaseRepository;
 	
 	
 	@RequestMapping("/")
 	public String index() throws Exception {
-		databaseRepository.getMeta();
+		LOGGER.debug("This is a debug message");
+		LOGGER.info("测试Logger");
+		LOGGER.warn("this is a warn message");
+		LOGGER.error("This is a error Message");
+		//databaseRepository.getMeta();
 		
 		return "Greetings from Spring boot!";
 	}
