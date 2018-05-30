@@ -19,6 +19,8 @@
 **------------------------------------------------------------------------------------------------*/
 package com.tonfun.tools.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,20 +34,31 @@ import com.tonfun.tools.dao.DataBaseRepository;
  * =======================================================================================*/
 @RestController
 public class HelloController {
+	private final static Logger LOGGER = LoggerFactory.getLogger(HelloController.class);
 	@Autowired
 	DataBaseRepository databaseRepository;
+	/*@Autowired
+	IPositionService postionService;*/
 	
 	
 	@RequestMapping("/")
 	public String index() throws Exception {
 		databaseRepository.getMeta();
+		/*
+		Position position = new Position();
+		position.setPosName("新增");
+		postionService.save(position);
+		
+		position.setPosName("更新");
+		postionService.update(position);
+		
+		postionService.delete(position);*/
 		
 		return "Greetings from Spring boot!";
 	}
 	@RequestMapping("/prod")
 	public String getProd() {
 		
-		return "获取到的产品名称为:";
-		
+		return "获取到的产品名称为:";		
 	}
 }

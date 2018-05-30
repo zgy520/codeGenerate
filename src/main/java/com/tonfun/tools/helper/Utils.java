@@ -19,6 +19,12 @@
 **------------------------------------------------------------------------------------------------*/
 package com.tonfun.tools.helper;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.Map;
+
+
 /** ========================================================================================
  * @author a4423
  * 
@@ -38,5 +44,34 @@ public class Utils {
 		char[] cs = stringBuilder.toString().toCharArray();		
 		cs[0]-=32;
 		return String.valueOf(cs);
-	}	
+	}
+	/**
+	 * ========================================================================================
+	 * getFields: 获取对象中的所有字段和该字段对应的值
+	 * @param object  对象源
+	 * @param publicOnly  是否只获取公共字段
+	 * @return
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 * =======================================================================================
+	 */
+	public static Map<String, Object> getFields(final Object object,boolean publicOnly) throws IllegalArgumentException, IllegalAccessException {
+		Class<? extends Object> cls = object.getClass();
+		Map<String, Object> map = new HashMap<>();
+		Field[] fields = cls.getDeclaredFields();
+		for(int i = 0; i < fields.length; i++) {
+			String name = fields[i].getName();
+			if (publicOnly) {
+				if (Modifier.isPublic(fields[i].getModifiers())) {
+					Object value = fields[i].get(object);
+					map.put(name, value);
+				}
+			}else {
+				fields[i].setAccessible(true);
+				Object value = fields[i].get(object);
+				map.put(name, value);
+			}
+		}		
+		return map;
+	}
 }

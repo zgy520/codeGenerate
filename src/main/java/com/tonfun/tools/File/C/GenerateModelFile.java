@@ -24,6 +24,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Set;
 
+import javax.persistence.EntityListeners;
+
+import com.tonfun.tools.Auditing.hibernate.AuditListener;
 import com.tonfun.tools.dao.util.Column;
 import com.tonfun.tools.dao.util.ForeginKey;
 import com.tonfun.tools.dao.util.Table;
@@ -69,7 +72,9 @@ public class GenerateModelFile extends GenerateJavaFile {
 				"import javax.persistence.JoinColumn;\r\n"+
 				"import java.util.Set;\r\n"+
 				"import java.util.HashSet;\r\n"+
-				"import javax.persistence.OneToMany;\r\n");
+				"import javax.persistence.OneToMany;\r\n"+
+				"import com.tonfun.tools.Auditing.hibernate.AuditListener;\r\n"+
+				"import javax.persistence.EntityListeners;\r\n");
 		printWriter.println("\r\n\r\n\r\n");
 	}
 
@@ -81,6 +86,7 @@ public class GenerateModelFile extends GenerateJavaFile {
 	protected void outputClassAnnotation(Table table) {
 		// TODO Auto-generated method stub
 		this.printWriter.println("@Entity");
+		this.printWriter.println("@EntityListeners(AuditListener.class)");
 		this.printWriter.println("@Table(name=\""+table.getTableName()+"\")");
 		this.printWriter.println("//对应的表为:"+table.getTableName());
 	}
