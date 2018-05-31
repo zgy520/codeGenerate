@@ -161,7 +161,7 @@ public abstract class GenerateJavaFile implements IGenericFileGenerator {
 	 * outputClassEndingOperator: 输出结尾符
 	 * =======================================================================================
 	 */
-	protected void outputClassEndingOperator() {
+	protected final void outputClassEndingOperator() {
 		this.printWriter.println("}");
 	}
 	/**
@@ -169,7 +169,7 @@ public abstract class GenerateJavaFile implements IGenericFileGenerator {
 	 * closePrintWriter: 关闭文件的写入对象printWriter
 	 * =======================================================================================
 	 */
-	private void closePrintWriter() {
+	private final void closePrintWriter() {
 		this.printWriter.close();
 	}
 

@@ -43,16 +43,8 @@ public class HelloController {
 	
 	@RequestMapping("/")
 	public String index() throws Exception {
+
 		databaseRepository.getMeta();
-		/*
-		Position position = new Position();
-		position.setPosName("新增");
-		postionService.save(position);
-		
-		position.setPosName("更新");
-		postionService.update(position);
-		
-		postionService.delete(position);*/
 		
 		return "Greetings from Spring boot!";
 	}

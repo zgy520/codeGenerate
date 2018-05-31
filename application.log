@@ -699,3 +699,35 @@
 2018-05-30 21:19:32 [http-nio-8080-exec-1][180] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring FrameworkServlet 'dispatcherServlet'
 2018-05-30 21:19:32 [http-nio-8080-exec-1][494] INFO  o.s.web.servlet.DispatcherServlet - FrameworkServlet 'dispatcherServlet': initialization started
 2018-05-30 21:19:32 [http-nio-8080-exec-1][509] INFO  o.s.web.servlet.DispatcherServlet - FrameworkServlet 'dispatcherServlet': initialization completed in 31 ms
+2018-05-30 22:08:45 [main][50] INFO  com.tonfun.tools.Application - Starting Application on ZGY-ZJX-2018 with PID 7488 (started by a4423 in E:\learning\git projects\Codegenerator\codeGenerate)
+2018-05-30 22:08:45 [main][659] INFO  com.tonfun.tools.Application - No active profile set, falling back to default profiles: default
+2018-05-30 22:08:45 [main][590] INFO  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Refreshing org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@5276e6b0: startup date [Wed May 30 22:08:45 CST 2018]; root of context hierarchy
+2018-05-30 22:08:47 [main][328] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$82181824] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2018-05-30 22:08:47 [main][91] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2018-05-30 22:08:47 [main][180] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2018-05-30 22:08:47 [main][180] INFO  o.a.catalina.core.StandardEngine - Starting Servlet Engine: Apache Tomcat/8.5.29
+2018-05-30 22:08:47 [localhost-startStop-1][180] INFO  o.a.c.core.AprLifecycleListener - The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: [C:\Program Files\Java\jdk1.8.0_144\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:/Program Files/Java/jre1.8.0_144/bin/server;C:/Program Files/Java/jre1.8.0_144/bin;C:/Program Files/Java/jre1.8.0_144/lib/amd64;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;D:\Program Files (x86)\Python\Python35;D:\Program Files (x86)\Python\Python35\Scripts;D:\Program Files\Android\Android Studio\jre\bin;D:\Anaconda3\Scripts;D:\Program Files\MongoDB\Server\3.4\bin;E:\software\programming\Android\sdk\platform-tools;E:\software\programming\gradle\gradle-4.3.1\bin;E:\software\programming\maven\apache-maven-3.5.2\bin;D:\Program Files\nodejs\;E:\learning\Node\curl-7.57.0;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\MySQL\MySQL Utilities 1.6\;D:\Program Files (x86)\Subversion\bin;D:\Program Files\TortoiseSVN\bin;D:\Program Files\Git\cmd;C:\WINDOWS\System32\OpenSSH\;C:\Users\a4423\scoop\shims;D:\Program Files (x86)\Python\Python35\Scripts\;D:\Program Files (x86)\Python\Python35\;C:\Users\a4423\AppData\Local\Microsoft\WindowsApps;C:\Users\a4423\AppData\Roaming\npm;C:\Users\a4423\AppData\Local\Microsoft\WindowsApps;;C:\WINDOWS\System32;;.]
+2018-05-30 22:08:47 [localhost-startStop-1][180] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2018-05-30 22:08:47 [localhost-startStop-1][185] INFO  o.s.b.w.s.ServletRegistrationBean - Servlet dispatcherServlet mapped to [/]
+2018-05-30 22:08:47 [localhost-startStop-1][244] INFO  o.s.b.w.s.FilterRegistrationBean - Mapping filter: 'characterEncodingFilter' to: [/*]
+2018-05-30 22:08:47 [localhost-startStop-1][244] INFO  o.s.b.w.s.FilterRegistrationBean - Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2018-05-30 22:08:47 [localhost-startStop-1][244] INFO  o.s.b.w.s.FilterRegistrationBean - Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2018-05-30 22:08:47 [localhost-startStop-1][244] INFO  o.s.b.w.s.FilterRegistrationBean - Mapping filter: 'requestContextFilter' to: [/*]
+2018-05-30 22:08:48 [main][110] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2018-05-30 22:08:48 [main][123] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2018-05-30 22:08:48 [main][361] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Building JPA container EntityManagerFactory for persistence unit 'default'
+2018-05-30 22:08:48 [main][31] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2018-05-30 22:08:48 [main][45] INFO  org.hibernate.Version - HHH000412: Hibernate Core {5.2.16.Final}
+2018-05-30 22:08:48 [main][213] INFO  org.hibernate.cfg.Environment - HHH000206: hibernate.properties not found
+2018-05-30 22:08:48 [main][66] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2018-05-30 22:08:49 [main][157] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2018-05-30 22:08:49 [main][415] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2018-05-30 22:08:49 [main][235] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2018-05-30 22:08:50 [main][433] INFO  o.s.j.e.a.AnnotationMBeanExporter - Registering beans for JMX exposure on startup
+2018-05-30 22:08:50 [main][895] INFO  o.s.j.e.a.AnnotationMBeanExporter - Bean with name 'dataSource' has been autodetected for JMX exposure
+2018-05-30 22:08:50 [main][668] INFO  o.s.j.e.a.AnnotationMBeanExporter - Located MBean 'dataSource': registering with JMX server as MBean [com.zaxxer.hikari:name=dataSource,type=HikariDataSource]
+2018-05-30 22:08:50 [main][206] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2018-05-30 22:08:50 [main][59] INFO  com.tonfun.tools.Application - Started Application in 5.422 seconds (JVM running for 6.225)
+2018-05-30 22:08:59 [http-nio-8080-exec-1][180] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring FrameworkServlet 'dispatcherServlet'
