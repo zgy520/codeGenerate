@@ -64,7 +64,7 @@ public abstract class GenerateJavaFile implements IGenericFileGenerator {
 	 * @see com.tonfun.tools.File.I.IGenericFileGenerator#fileGenerator()
 	 * =======================================================================================*/
 	@Override
-	public ErrorCode fileGenerator() {
+	public final ErrorCode fileGenerator() {
 		// TODO Auto-generated method stub
 		for(Table table : schemaTables) {
 			if (table.isCreatedFile()) {  // 用于判断哪些表是需要创建文件的
