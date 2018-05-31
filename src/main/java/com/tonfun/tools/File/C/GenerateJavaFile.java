@@ -64,7 +64,7 @@ public abstract class GenerateJavaFile implements IGenericFileGenerator {
 	 * @see com.tonfun.tools.File.I.IGenericFileGenerator#fileGenerator()
 	 * =======================================================================================*/
 	@Override
-	public ErrorCode fileGenerator() {
+	public final ErrorCode fileGenerator() {
 		// TODO Auto-generated method stub
 		for(Table table : schemaTables) {
 			if (table.isCreatedFile()) {  // 用于判断哪些表是需要创建文件的
@@ -161,7 +161,7 @@ public abstract class GenerateJavaFile implements IGenericFileGenerator {
 	 * outputClassEndingOperator: 输出结尾符
 	 * =======================================================================================
 	 */
-	protected void outputClassEndingOperator() {
+	protected final void outputClassEndingOperator() {
 		this.printWriter.println("}");
 	}
 	/**
@@ -169,7 +169,7 @@ public abstract class GenerateJavaFile implements IGenericFileGenerator {
 	 * closePrintWriter: 关闭文件的写入对象printWriter
 	 * =======================================================================================
 	 */
-	private void closePrintWriter() {
+	private final void closePrintWriter() {
 		this.printWriter.close();
 	}
 
