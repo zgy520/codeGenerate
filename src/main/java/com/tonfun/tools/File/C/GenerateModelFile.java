@@ -31,6 +31,8 @@ import com.tonfun.tools.dao.util.ForeginKey;
 import com.tonfun.tools.dao.util.Table;
 import com.tonfun.tools.helper.FileOperator;
 import com.tonfun.tools.helper.Utils;
+import com.tonfun.tools.helper.method.GenericMethodOuput;
+import com.tonfun.tools.helper.method.MethodInfo;
 import com.tonfun.tools.indepent.TypeConvetor.TypeConvertBetweenMySQLAndJava;
 
 /** ========================================================================================
@@ -120,12 +122,19 @@ public class GenerateModelFile extends GenerateJavaFile {
 		generateFieldMethods(columns, printWriter);
 		// 产生关系实体的get和set方法
 		generateGetAndSetForRelationField(table, printWriter);
+		GenericMethodOuput methodOuput = new GenericMethodOuput(this.printWriter);
 		// 产生toString方法
-		this.outputStrMethod();
+		methodOuput.setMethodInfo(this.outputStrMethod());
+		methodOuput.outputMethod();
+		//this.outputStrMethod();
 		// 产生静态字段
 		this.outputStaticFields();
-		this.outputEqualsMethod();
-		this.outputHashCode();
+		//重载Equals方法
+		methodOuput.setMethodInfo(this.outputEqualsMethod());
+		methodOuput.outputMethod();
+		//重载hashCode方法
+		methodOuput.setMethodInfo(this.outputHashCode());
+		methodOuput.outputMethod();
 	}
 	
 	/**
@@ -273,33 +282,37 @@ public class GenerateModelFile extends GenerateJavaFile {
 	/**
 	 * 重载toString方法
 	 */
-	private void outputStrMethod() {
-		this.printWriter.println("  @Override");
-		this.printWriter.println("  public String toString() {");
-		this.outputStringMethodContent();
-		this.printWriter.println("  }");
+	private MethodInfo outputStrMethod() {
+		MethodInfo methodInfo = new MethodInfo("public ", "String ", "toString", true);
+		methodInfo.setMethodContent(this.outputStringMethodContent());
+		return methodInfo;
 	}
 	/**
 	 * 重载equals方法
 	 */
-	private void outputEqualsMethod() {
-		this.printWriter.println("  @Override");
-		this.printWriter.println("  public boolean equals(Object o) {");
-		this.printWriter.println("    if(this == o) return true;");
-		this.printWriter.println("    if(!(o instanceof "+this.getCaptureTableName()+")) return false;");
-		this.printWriter.println("    "+this.getCaptureTableName() +" "+this.getTableName() + "= ("+this.getCaptureTableName()+")o;");
+	private MethodInfo outputEqualsMethod() {
+		MethodInfo methodInfo = new MethodInfo("public ", "boolean ", "equals", true);
+		String[] argTypes = {"Object"};
+		String[] argValue = {"o"};
+		methodInfo.setArgsTypesList(argTypes);
+		methodInfo.setArgsList(argValue);
+		StringBuilder methodContent = new StringBuilder();
+		methodContent.append("    if(this == o) return true;\n");
+		methodContent.append("    if(!(o instanceof "+this.getCaptureTableName()+")) return false;\n");
+		methodContent.append("    "+this.getCaptureTableName() +" "+this.getTableName() + "= ("+this.getCaptureTableName()+")o;\n");
 		String id = this.curOperateTable.getColumns().stream().filter(colum->colum.isPrimaryKey()).map(Column::getColumnName).findFirst().get();
-		this.printWriter.println("    return "+id+"!= null && "+id+".equals("+this.getTableName()+"."+id+");");
-		this.printWriter.println("  }");
+		methodContent.append("    return "+id+"!= null && "+id+".equals("+this.getTableName()+"."+id+");");
+		methodInfo.setMethodContent(methodContent);
+		
+		return methodInfo;
 	}
 	/**
 	 * 重载hashCode方法
 	 */
-	private void outputHashCode() {
-		this.printWriter.println("  @Override");
-		this.printWriter.println("  public int hashCode() {");
-		this.printWriter.println("    return 31;");
-		this.printWriter.println("  }");
+	private MethodInfo outputHashCode() {
+		MethodInfo methodInfo = new MethodInfo("public ", "int ", "hashCode", true);
+		methodInfo.setMethodContent(new StringBuilder("    return 31;"));
+		return methodInfo;
 	}
 	
 	//todo 以上重载的toString,toEquals和HashCode方法可以进行重构
@@ -308,7 +321,9 @@ public class GenerateModelFile extends GenerateJavaFile {
 	/**
 	 * 输出toString方法的内容
 	 */
-	private void outputStringMethodContent() {
+	private StringBuilder outputStringMethodContent() {
+		StringBuilder methodContent = new StringBuilder();
+		
 		StringBuilder paramBuilder = new StringBuilder();
 		paramBuilder.append("\"");
 		StringBuilder valueBuilder = new StringBuilder();
@@ -322,7 +337,9 @@ public class GenerateModelFile extends GenerateJavaFile {
 					}
 					
 				});
-		this.printWriter.println("    return String.format("+paramBuilder.toString().substring(0, paramBuilder.length() - 1)+"\","+ valueBuilder.toString().substring(0,valueBuilder.toString().length() - 1)+");");
+		methodContent.append("    return String.format("+paramBuilder.toString().substring(0, paramBuilder.length() - 1)+"\","+ valueBuilder.toString().substring(0,valueBuilder.toString().length() - 1)+");");
+		//this.printWriter.println("    return String.format("+paramBuilder.toString().substring(0, paramBuilder.length() - 1)+"\","+ valueBuilder.toString().substring(0,valueBuilder.toString().length() - 1)+");");
+		return methodContent;
 	}
 	/**
 	 * 输出静态字段
@@ -341,10 +358,6 @@ public class GenerateModelFile extends GenerateJavaFile {
 						this.printWriter.println("    return FIELD_"+column.getColumnName().toUpperCase()+";");
 						this.printWriter.println("  }\r\n");
 					}
-					
 				});	
 	}
-	
-	
-
 }
