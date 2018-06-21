@@ -37,14 +37,14 @@ public class HelloController {
 	private final static Logger LOGGER = LoggerFactory.getLogger(HelloController.class);
 	@Autowired
 	DataBaseRepository databaseRepository;
-	/*@Autowired
-	IPositionService postionService;*/
+	
 	
 	
 	@RequestMapping("/")
 	public String index() throws Exception {
 
 		databaseRepository.getMeta();
+	
 		
 		return "Greetings from Spring boot!";
 	}

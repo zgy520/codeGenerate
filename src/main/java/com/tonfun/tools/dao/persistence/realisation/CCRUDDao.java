@@ -24,7 +24,8 @@ import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
+
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tonfun.tools.dao.persistence.contract.ICRUDDao;
 
@@ -54,6 +55,7 @@ public abstract class CCRUDDao<T,ID extends Serializable> implements ICRUDDao<T,
 	 * @see com.tonfun.tools.dao.persistence.contract.ICRUDDao#findById(java.io.Serializable)
 	 * =======================================================================================
 	 */
+	//@Transactional("transactionManager")
 	public T findById(ID id) {
 		return getEntityManager().find(this.clazz, id);
 	}
@@ -64,6 +66,7 @@ public abstract class CCRUDDao<T,ID extends Serializable> implements ICRUDDao<T,
 	 * @see com.tonfun.tools.dao.persistence.contract.ICRUDDao#findAll()
 	 * =======================================================================================
 	 */
+	//@Transactional("transactionManager")
 	@SuppressWarnings("unchecked")
 	public List<T> findAll(){
 		return getEntityManager().createQuery("from "+this.clazz.getName()).getResultList();
@@ -76,6 +79,7 @@ public abstract class CCRUDDao<T,ID extends Serializable> implements ICRUDDao<T,
 	 * @see com.tonfun.tools.dao.persistence.contract.ICRUDDao#save(java.lang.Object)
 	 * =======================================================================================
 	 */
+	@Transactional("transactionManager")
 	public T save(T entity) {
 		getEntityManager().persist(entity);
 		return entity;
@@ -87,6 +91,7 @@ public abstract class CCRUDDao<T,ID extends Serializable> implements ICRUDDao<T,
 	 * @see com.tonfun.tools.dao.persistence.contract.ICRUDDao#update(java.lang.Object)
 	 * =======================================================================================
 	 */
+	@Transactional("transactionManager")
 	public void update(T entity) {
 		getEntityManager().merge(entity);
 	}
@@ -97,6 +102,7 @@ public abstract class CCRUDDao<T,ID extends Serializable> implements ICRUDDao<T,
 	 * @see com.tonfun.tools.dao.persistence.contract.ICRUDDao#delete(java.lang.Object)
 	 * =======================================================================================
 	 */
+	@Transactional("transactionManager")
 	public void delete(T entity) {
 		if (entity!=null) {
 			getEntityManager().remove(entity);
@@ -112,6 +118,7 @@ public abstract class CCRUDDao<T,ID extends Serializable> implements ICRUDDao<T,
 	 * @see com.tonfun.tools.dao.persistence.contract.ICRUDDao#deleteById(java.io.Serializable)
 	 * =======================================================================================
 	 */
+	@Transactional("transactionManager")
 	public void deleteById(ID id) {
 		T entity = this.findById(id);
 		this.delete(entity);
@@ -123,6 +130,7 @@ public abstract class CCRUDDao<T,ID extends Serializable> implements ICRUDDao<T,
 	 * @param t
 	 * @see com.tonfun.tools.dao.persistence.contract.ICRUDDao#saveOrUpdate(java.lang.Object)
 	 * =======================================================================================*/
+	//@Transactional("transactionManager")
 	@Override
 	public void saveOrUpdate(T t) {
 		// TODO Auto-generated method stub

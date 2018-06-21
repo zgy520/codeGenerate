@@ -18,17 +18,23 @@ public class GenericMethodOuput {
 	public final void outputMethod() {
 		this.outputMethodComment();
 		this.outputMethodOverride();
+		this.outputMethodAnnotation();
 		this.outputMethodTitle();
 		this.ouputMethodContent();
-		this.outputMethodEnd();
+		if (!this.methodInfo.isSpecifiedMethod()) {
+			this.outputMethodEnd();
+		}		
 	}
 	/**
 	 * 输出方法注释
 	 */
 	private void outputMethodComment() {
+		this.printWriter.println("  /**");
+		this.printWriter.print("  * ");
 		if (this.methodInfo.getMethodComment()!=null && !this.methodInfo.getMethodComment().equals("")) {
-			this.printWriter.println("  "+this.methodInfo.getMethodComment());
+			this.printWriter.print("  "+this.methodInfo.getMethodComment());
 		}
+		this.printWriter.println("\r\n  */");
 	}
 	/**
 	 * 输出重载标识
@@ -36,6 +42,17 @@ public class GenericMethodOuput {
 	private void outputMethodOverride() {
 		if (this.methodInfo.isOverrided()) {
 			this.printWriter.println("  "+"@Override");
+		}
+	}
+	/**
+	 * 方法标注
+	 */
+	private void outputMethodAnnotation() {
+		if (this.methodInfo.getMethodAnnotations() != null && this.methodInfo.getMethodAnnotations().length > 0) {
+			int len = this.methodInfo.getMethodAnnotations().length;
+			for(int i = 0; i < len; i++) {
+				this.printWriter.println("  "+this.methodInfo.getMethodAnnotations()[i]);
+			}
 		}
 	}
 	/**
@@ -83,7 +100,11 @@ public class GenericMethodOuput {
 				}
 			}
 		}
-		this.printWriter.println(") {");
+		if (!methodInfo.isSpecifiedMethod()) {
+			this.printWriter.println(") {");
+		}else {
+			this.printWriter.println(");");
+		}
 	}
 	/**
 	 * 输出方法内容

@@ -28,6 +28,7 @@ import java.util.Set;
  * 
  * =======================================================================================*/
 public class Table {
+	
 	private String schemaName;  //数据库名
 	private String tableName;  //表名称
 	private String tableComment; //表注释	

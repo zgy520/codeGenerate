@@ -19,6 +19,11 @@
 **------------------------------------------------------------------------------------------------*/
 package com.tonfun.tools.dao.util;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 /** ========================================================================================
@@ -29,6 +34,8 @@ import java.util.Set;
 public class DatabaseMeta {
 	private Set<Table> tables;
 	private Set<ForeginKey> foreginKeys;
+	private static Set<ManyToManyRelation> manyRelations = new HashSet<>();  // 所有表中多对多的关系
+	private static Map<String, ManyToManyRelation> keyRelation = new HashMap<>();  // 存储map类型的关系
 	public DatabaseMeta(Set<Table> tables,Set<ForeginKey> foreginKeys) {
 		this.tables = tables;
 		this.foreginKeys = foreginKeys;
@@ -50,8 +57,33 @@ public class DatabaseMeta {
 					table.addAniForeginKey(foreginKey);
 				}
 			}
+			
 		});		
 		return this.tables;
+	}
+	/**
+	 * 获取多对多的关系
+	 */
+	public void queyManyToManyRelation() {
+		this.tables.stream().forEach(table->{
+			if (table.getCountOfPrimaryKey() == 2) {
+				Iterator<ForeginKey> foreginKeys = table.getForeginKeys().iterator();
+				ForeginKey foreginKey = foreginKeys.next();
+				ManyToManyRelation manyRelation = new ManyToManyRelation(table.getTableName(),foreginKey.getReferencedTableName(), 
+						foreginKey.getReferencedColumnName(),"","");
+				if (foreginKeys.hasNext()) {
+					foreginKey = foreginKeys.next();
+					manyRelation.setMiniorTableName(foreginKey.getReferencedTableName());
+					manyRelation.setMiniorColumnName(foreginKey.getReferencedColumnName());
+				}
+				manyRelation.setRelationName(manyRelation.getPrimaryTableName()+":"+manyRelation.getMiniorTableName());
+				//manyRelations.add(manyRelation);
+				if (!keyRelation.containsKey(manyRelation.getRelationName())) {
+					keyRelation.put(manyRelation.getRelationName(), manyRelation);
+				}
+			}
+		});
+		System.out.println("共获取到的数量为:"+keyRelation.size()+"个");
 	}
 	/** ========================================================================================
 	 * getTables: 
@@ -81,4 +113,11 @@ public class DatabaseMeta {
 	public void setForeginKeys(Set<ForeginKey> foreginKeys) {
 		this.foreginKeys = foreginKeys;
 	}	
+	/**
+	 * 获取多对多的关系
+	 * @return
+	 */
+	public static Map<String, ManyToManyRelation> getKeyManyRelations(){
+		return Collections.unmodifiableMap(keyRelation);
+	}
 }

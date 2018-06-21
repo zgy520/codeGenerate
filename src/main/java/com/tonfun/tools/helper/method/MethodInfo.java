@@ -10,9 +10,11 @@ public class MethodInfo {
 	private final String methodAccessible;  // 方法级别  private protected public
 	private String methodComment;  // 方法注释
 	private StringBuilder methodContent; // 方法内容
-	private final boolean isOverrided;  // 是否是重载方法
+	private boolean isOverrided;  // 是否是重载方法
+	private String[] methodAnnotations; // 方法注解
 	private String[] argsTypesList;  // 参数类型列表
 	private String[] argsList;  // 参数列表
+	private Boolean isSpecifiedMethod;  //是否特殊方法，即接口方法或者抽象方法
 	
 	public MethodInfo(String methodAccessible,String methodReturnType,
 			String methodName,boolean isOverrided) {
@@ -68,6 +70,29 @@ public class MethodInfo {
 
 	public void setArgsList(String[] argsList) {
 		this.argsList = argsList;
+	}
+
+	public String[] getMethodAnnotations() {
+		return methodAnnotations;
+	}
+
+	public void setMethodAnnotations(String[] methodAnnotations) {
+		this.methodAnnotations = methodAnnotations;
+	}
+
+	public boolean isSpecifiedMethod() {
+		if (isSpecifiedMethod==null) {
+			this.isSpecifiedMethod = false;
+		}
+		return isSpecifiedMethod;
+	}
+
+	public void setSpecifiedMethod(boolean isSpecifiedMethod) {
+		this.isSpecifiedMethod = isSpecifiedMethod;
+	}
+
+	public void setOverrided(boolean isOverrided) {
+		this.isOverrided = isOverrided;
 	}
 	
 }

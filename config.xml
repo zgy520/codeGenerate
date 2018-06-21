@@ -2,11 +2,12 @@
 <!-- 对于整个程序的配置文件 -->
 <codeGenerator>
 	<packageName><!-- 产生文件对应的包名 -->		
-		<Model>com.tonfun.tools.Model</Model>
-		<DaoInterface>com.tonfun.tools.dao.test.I</DaoInterface>
-		<DaoImpl>com.tonfun.tools.dao.test.C</DaoImpl>
-		<ServiceInterface>com.tonfun.tools.service.I.module.sys.CI</ServiceInterface>
-		<ServiceImpl>com.tonfun.tools.service.C.module.sys.CC</ServiceImpl>
+		<Model>com.tonfun.tools.Model.sys</Model>
+		<DaoInterface>com.tonfun.tools.dao.test.I.sys</DaoInterface>
+		<DaoImpl>com.tonfun.tools.dao.test.C.sys</DaoImpl>
+		<ServiceInterface>com.tonfun.tools.service.I.module.sys.CI.sys</ServiceInterface>
+		<ServiceImpl>com.tonfun.tools.service.C.module.sys.CC.sys</ServiceImpl>
+		<Controller>com.tonfun.tools.controller.autoController.sys</Controller>
 	</packageName>
 	<prefix> <!-- 产生文件对应的前缀名 -->
 		<Model> </Model>
@@ -14,6 +15,7 @@
 		<DaoImpl> </DaoImpl>
 		<ServiceInterface>I</ServiceInterface>
 		<ServiceImpl> </ServiceImpl>
+		<Controller> </Controller>
 	</prefix>
 	<suffix><!-- 产生文件对应的后缀名 -->
 		<Model> </Model>
@@ -21,5 +23,6 @@
 		<DaoImpl>DaoImpl</DaoImpl>
 		<ServiceInterface>Service</ServiceInterface>
 		<ServiceImpl>ServiceImpl</ServiceImpl>
+		<Controller>Controller</Controller>
 	</suffix>
 </codeGenerator>

@@ -21,13 +21,19 @@ package com.tonfun.tools.File.C;
 
 import java.io.PrintWriter;
 import java.util.Comparator;
+import java.util.Map;
 import java.util.Set;
 
-import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
-import com.tonfun.tools.Auditing.hibernate.AuditListener;
+import com.tonfun.tools.File.FileGeneratorType;
 import com.tonfun.tools.dao.util.Column;
+import com.tonfun.tools.dao.util.DatabaseMeta;
 import com.tonfun.tools.dao.util.ForeginKey;
+import com.tonfun.tools.dao.util.ManyToManyRelation;
 import com.tonfun.tools.dao.util.Table;
 import com.tonfun.tools.helper.FileOperator;
 import com.tonfun.tools.helper.Utils;
@@ -41,6 +47,11 @@ import com.tonfun.tools.indepent.TypeConvetor.TypeConvertBetweenMySQLAndJava;
  * =======================================================================================*/
 public class GenerateModelFile extends GenerateJavaFile {
 
+	private static Map<String, ManyToManyRelation> keyManyRelations;
+	
+	static {
+		keyManyRelations = DatabaseMeta.getKeyManyRelations();
+	}
 	/** ========================================================================================
 	 * 构造函数
 	 * @param schemaTables
@@ -48,7 +59,7 @@ public class GenerateModelFile extends GenerateJavaFile {
 	 * @param typeConvert
 	 * =======================================================================================*/
 	public GenerateModelFile(Set<Table> schemaTables, FileOperator fileOperator) {
-		super(schemaTables, fileOperator, new TypeConvertBetweenMySQLAndJava());
+		super(schemaTables, fileOperator, new TypeConvertBetweenMySQLAndJava(),FileGeneratorType.Model);
 		// TODO Auto-generated constructor stub
 	}
 	/** ========================================================================================
@@ -75,6 +86,9 @@ public class GenerateModelFile extends GenerateJavaFile {
 				"import java.util.HashSet;\r\n"+
 				"import javax.persistence.OneToMany;\r\n"+
 				"import com.tonfun.tools.Auditing.hibernate.AuditListener;\r\n"+
+				"import com.fasterxml.jackson.annotation.JsonIgnore;\r\n"+
+				"import javax.persistence.ManyToMany;\r\n" + 
+				"import javax.persistence.JoinTable;\r\n"+
 				"import javax.persistence.EntityListeners;\r\n");
 		printWriter.println("\r\n\r\n\r\n");
 	}
@@ -89,6 +103,7 @@ public class GenerateModelFile extends GenerateJavaFile {
 		this.printWriter.println("@Entity");
 		this.printWriter.println("@EntityListeners(AuditListener.class)");
 		this.printWriter.println("@Table(name=\""+table.getTableName()+"\")");
+		//this.printWriter.println("@JsonIgnoreProperties(value={\"hibernateLazyInitializer\",\"handler\",\"fieldHandler\"})");
 		this.printWriter.println("//对应的表为:"+table.getTableName());
 	}
 
@@ -100,6 +115,7 @@ public class GenerateModelFile extends GenerateJavaFile {
 	@Override
 	protected void outputClassContent() {
 		// TODO Auto-generated method stub
+		super.outputClassContent();
 		Table table = this.curOperateTable;
 		Set<Column> columns = table.getColumns();
 		columns.stream().sorted(Comparator.comparing(Column::getSerial))
@@ -154,6 +170,7 @@ public class GenerateModelFile extends GenerateJavaFile {
 			if (this.countOfPrimaryKeys(foreginKey.getReferencedTableName()) && !foreginKey.getTableName().equals(foreginKey.getReferencedTableName())) {
 				printWriter.println("  @ManyToOne(fetch = FetchType.LAZY)");
 				printWriter.println("  @JoinColumn(name = \""+foreginKey.getColumnName()+"\")");
+				printWriter.println("  @JsonIgnore");
 				printWriter.println("  private "+Utils.captureName(foreginKey.getReferencedTableName())+
 						"  "+foreginKey.getReferencedTableName().toLowerCase()+";\r\n");
 			}		
@@ -162,10 +179,39 @@ public class GenerateModelFile extends GenerateJavaFile {
 		 * 添加一对多的关系
 		 */
 		table.getAniForeginKeys().stream().forEach(aniForeginKey->{
-			if (this.countOfPrimaryKeys(aniForeginKey.getTableName())) {
-				printWriter.println("  @OneToMany(mappedBy = \""+aniForeginKey.getReferencedTableName().toLowerCase()+"\")");				
+			if (this.countOfPrimaryKeys(aniForeginKey.getTableName()) && !aniForeginKey.getTableName().equals(aniForeginKey.getReferencedTableName())) {
+				printWriter.println("  @OneToMany(mappedBy = \""+aniForeginKey.getReferencedTableName().toLowerCase()+"\")");
+				printWriter.println("  @JsonIgnore");
 				printWriter.println("  private Set<"+Utils.captureName(aniForeginKey.getTableName())+
 						">  "+aniForeginKey.getTableName().toLowerCase()+"s = new HashSet<>();\r\n");
+			}
+		});
+		/**
+		 * 添加多对多的关系
+		 */
+		keyManyRelations.forEach((key,value)->{
+			if (key.contains(table.getTableName())) {
+				printWriter.println("  @ManyToMany(fetch=FetchType.LAZY)");
+				printWriter.print("  @JoinTable(name=\""+value.getCurTableName()+"\"" +
+									",joinColumns = {@JoinColumn(name=\"");
+				String CurcolumnName = "";
+				String OtherColumnName = "";
+				String tableName = "";
+				if (value.getPrimaryTableName().equals(table.getTableName())) {
+					CurcolumnName = value.getPrimaryColumnName();
+					OtherColumnName = value.getMiniorColumnName();
+					tableName = value.getMiniorTableName();
+				}else {
+					CurcolumnName = value.getMiniorColumnName();
+					OtherColumnName = value.getPrimaryColumnName();
+					tableName = value.getPrimaryTableName();
+				}
+				printWriter.print(CurcolumnName+"\")},"
+						+ "inverseJoinColumns = {@JoinColumn(name=\""+
+						OtherColumnName+"\")})\r\n");
+				printWriter.println("  @JsonIgnore");
+				printWriter.println("  private Set<"+Utils.captureName(tableName)+"> " 
+									+value.getCurTableName() + "_" + tableName+"s;");
 			}
 		});
 		printWriter.println("  //关系实体创建完毕");
@@ -178,7 +224,7 @@ public class GenerateModelFile extends GenerateJavaFile {
 	private void generateGetAndSetForRelationField(Table table,PrintWriter printWriter) {
 		table.getForeginKeys().stream().forEach(foreginKey->{
 			String className = Utils.captureName(foreginKey.getReferencedTableName());
-			if (!foreginKey.getTableName().equals(foreginKey.getReferencedTableName())) {  // 如果表明和应用的表明一样，则不做处理
+			if (this.countOfPrimaryKeys(foreginKey.getReferencedTableName()) && !foreginKey.getTableName().equals(foreginKey.getReferencedTableName())) {  // 如果表明和应用的表明一样，则不做处理
 				/**
 				 * 填充get方法
 				 */
@@ -196,7 +242,7 @@ public class GenerateModelFile extends GenerateJavaFile {
 		});
 		table.getAniForeginKeys().stream().forEach(aniForeginKey -> {
 			String className = Utils.captureName(aniForeginKey.getTableName());
-			if (this.countOfPrimaryKeys(aniForeginKey.getTableName())) {
+			if (this.countOfPrimaryKeys(aniForeginKey.getTableName()) && !aniForeginKey.getTableName().equals(aniForeginKey.getReferencedTableName())) {
 				/**
 				 * 填充get方法
 				 */
@@ -210,6 +256,34 @@ public class GenerateModelFile extends GenerateJavaFile {
 				printWriter.println("    this."+className.toLowerCase()+"s = "+className.toLowerCase()+"s;");
 				printWriter.println("  }\r\n");
 			}			
+		});
+		/**
+		 * 添加多对多的关系
+		 */
+		keyManyRelations.forEach((key,value)->{
+			if (key.contains(table.getTableName())) {
+
+				String tableName = "";
+				if (value.getPrimaryTableName().equals(table.getTableName())) {
+					tableName =Utils.captureName(value.getMiniorTableName());
+				}else {
+					tableName =Utils.captureName(value.getPrimaryTableName());
+				}
+				
+				/**
+				 * 填充get方法
+				 */
+				printWriter.println("  public Set<"+tableName+"> get"+value.getCurTableName()+"_"+tableName+"s() {");
+				printWriter.println("    return this."+value.getCurTableName()+"_"+tableName.toLowerCase()+"s;");
+				printWriter.println("  }\r\n");
+				
+				/**
+				 * 填充set方法
+				 */
+				printWriter.println("  public void set"+value.getCurTableName()+"_"+tableName+"s(Set<"+tableName +"> "+value.getCurTableName()+"_"+tableName.toLowerCase()+"s) {");
+				printWriter.println("    this."+value.getCurTableName()+"_"+tableName.toLowerCase()+"s = "+value.getCurTableName()+"_"+tableName.toLowerCase()+"s;");
+				printWriter.println("  }\r\n");
+			}
 		});
 	}
 	
@@ -277,7 +351,8 @@ public class GenerateModelFile extends GenerateJavaFile {
 	@Override
 	protected void outputClassName(String tableName) {
 		// TODO Auto-generated method stub
-		this.printWriter.println("public class "+Utils.captureName(tableName)+"{");
+		this.setClassName(this.getCaptureTableName());
+		this.printWriter.println("public class "+ this.getClassName() +"{");
 	}
 	/**
 	 * 重载toString方法

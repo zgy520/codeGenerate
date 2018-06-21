@@ -24,6 +24,7 @@ package com.tonfun.tools.Error;
  * 
  * =======================================================================================*/
 public enum ErrCode {
-	SUCCESS,
+	SUCCESS,  //成功
+	VALIDATION_FAILED,  // 验证失败
 	FAIL
 }

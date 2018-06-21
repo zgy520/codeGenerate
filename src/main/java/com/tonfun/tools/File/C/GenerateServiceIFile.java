@@ -15,7 +15,7 @@ import com.tonfun.tools.indepent.TypeConvetor.TypeConvertBetweenMySQLAndJava;
 public class GenerateServiceIFile extends GenerateJavaFile {
 
 	public GenerateServiceIFile(Set<Table> schemaTables, FileOperator fileOperator) {
-		super(schemaTables, fileOperator, new TypeConvertBetweenMySQLAndJava());
+		super(schemaTables, fileOperator, new TypeConvertBetweenMySQLAndJava(),FileGeneratorType.ServiceInterface);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -28,24 +28,27 @@ public class GenerateServiceIFile extends GenerateJavaFile {
 	@Override
 	protected void outputClassName(String tableName) {
 		// TODO Auto-generated method stub
-		printWriter.println("public interface "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.ServiceInterface,"prefix") +
-												this.getCaptureTableName() +
-												XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.ServiceInterface,"suffix") +
+		this.setClassName(XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.ServiceInterface,"prefix") +
+				this.getCaptureTableName() +
+				XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.ServiceInterface,"suffix"));
+		printWriter.println("public interface "+ this.getClassName() +
 				" extends IGenericSysService<"+this.getCaptureTableName()+", Long> " +
-				"{\r\n");
+				"{");
 	}
 
 	@Override
 	protected void outputClassContent() {
 		// TODO Auto-generated method stub
-		
+		super.outputClassContent();
+		this.getMethodFactory().outputMethodContent();
 	}
 	@Override
 	protected void outputReferencePackgaes() {
 		// TODO Auto-generated method stub
 		super.outputReferencePackgaes();
 		printWriter.println("\r\nimport com.tonfun.tools.service.I.module.sys.IGenericSysService;"
-				+ "\r\nimport "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.Model,"packageName")+"."+this.getCaptureTableName()+";\r\n");
+				+ "\r\nimport "+XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.Model,"packageName")+"."+this.getCaptureTableName()+";\r\n" +
+				"import com.tonfun.tools.Error.ErrorCode;\r\n");
 	}
 
 }

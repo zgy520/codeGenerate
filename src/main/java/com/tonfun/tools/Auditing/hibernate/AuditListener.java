@@ -22,17 +22,20 @@ package com.tonfun.tools.Auditing.hibernate;
 import java.util.Map;
 
 import javax.persistence.PostPersist;
-import javax.persistence.PostRemove;
 import javax.persistence.PostUpdate;
-import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import com.fasterxml.jackson.annotation.JacksonInject.Value;
+import com.tonfun.tools.Model.sys.Log;
+import com.tonfun.tools.Model.sys.Log_content;
 import com.tonfun.tools.helper.Utils;
+import com.tonfun.tools.helper.NoSpringContext.AutowireHelper;
+import com.tonfun.tools.service.I.module.sys.CI.sys.ILogService;
+import com.tonfun.tools.service.I.module.sys.CI.sys.ILog_contentService;
 
 /** ========================================================================================
  * @author a4423
@@ -40,6 +43,10 @@ import com.tonfun.tools.helper.Utils;
  * =======================================================================================*/
 public class AuditListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AuditListener.class);
+	@Autowired
+	ILogService logService;
+	@Autowired
+	ILog_contentService logContentService;
 	
 	@PreRemove
 	private void beforeDeleteEntity(Object object) {
@@ -48,9 +55,34 @@ public class AuditListener {
 	}
 	@PostPersist
 	private void afterSaveEntity(Object object) {
-		LOGGER.info("保存实体之后调用");		
+		AutowireHelper.autowire(this, this.logService);
+		AutowireHelper.autowire(this, this.logContentService);
+		LOGGER.info("保存实体之后调用"+object.getClass().getSimpleName());
+		String entityName = object.getClass().getSimpleName();
+		if (entityName.equals("Log") || entityName.equals("Log_content")) {
+			return;
+		}
+		Log log = new Log();
+		log.setLoginName("zgy");
+		log.setMessage("测试消息");
+		log.setOperation("add");
+		log.setTblName(entityName.toLowerCase());
+		log.setTblComment("无");
+		logService.save(log);
 		Map<String, Object> map = this.getMapByObj(object);
 		
+		for (Map.Entry<String, Object> entry : map.entrySet()){
+			if (!entry.getKey().contains("FIELD_")) {
+				Log_content log_content = new Log_content();
+				log_content.setFldName(entry.getKey());
+				log_content.setLog(log);
+				if (entry.getValue()!=null) {
+					log_content.setNewValue(entry.getValue().toString());
+				}
+				logContentService.save(log_content);
+				System.out.println(entry.getKey() + ":" + entry.getValue());
+			}		    
+		}
 	}
 	@PreUpdate
 	private void beforeUpdateEntity(Object object) {
@@ -68,9 +100,7 @@ public class AuditListener {
 	private Map<String, Object> getMapByObj(Object object){
 		try {
 			Map<String,Object> map = Utils.getFields(object, false);
-			for (Map.Entry<String, Object> entry : map.entrySet()){
-			    System.out.println(entry.getKey() + ":" + entry.getValue());
-			}
+			
 			return map;
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			// TODO Auto-generated catch block

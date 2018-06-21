@@ -22,11 +22,12 @@ package com.tonfun.tools.File;
 import java.util.Optional;
 import java.util.Set;
 
+import com.tonfun.tools.File.C.GenerateControllerFile;
 import com.tonfun.tools.File.C.GenerateDaoIFile;
 import com.tonfun.tools.File.C.GenerateDaoImplFile;
 import com.tonfun.tools.File.C.GenerateModelFile;
 import com.tonfun.tools.File.C.GenerateServiceIFile;
-import com.tonfun.tools.File.C.GenerateServiceImpl;
+import com.tonfun.tools.File.C.GenerateServiceImplFile;
 import com.tonfun.tools.File.I.IGenericFileGenerator;
 import com.tonfun.tools.dao.util.Table;
 import com.tonfun.tools.helper.FileOperator;
@@ -76,7 +77,9 @@ public class FileGeneratorFactory {
 		}else if (generatorType==FileGeneratorType.ServiceInterface) { // 获取产生service层接口类型的文件所对应的处理类
 			iGenericFileGenerator = new GenerateServiceIFile(tables, fileOperator);
 		}else if (generatorType==FileGeneratorType.ServiceImpl) { // 获取产生service层实现类类型的文件所对应的处理类
-			iGenericFileGenerator = new GenerateServiceImpl(tables, fileOperator);
+			iGenericFileGenerator = new GenerateServiceImplFile(tables, fileOperator);
+		}else if (generatorType==FileGeneratorType.Controller) {
+			iGenericFileGenerator = new GenerateControllerFile(tables, fileOperator);
 		}
 		
 		return iGenericFileGenerator;

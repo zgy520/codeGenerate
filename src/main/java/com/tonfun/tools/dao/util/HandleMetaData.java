@@ -52,6 +52,7 @@ public class HandleMetaData {
 		Set<ForeginKey> foreginKeys = this.queryForeginInfo(schameName);
 		DatabaseMeta databaseMeta = new DatabaseMeta(tables, foreginKeys);	
 		tables = databaseMeta.updateTableWithForegin();  // 更新表中的外键信息
+		databaseMeta.queyManyToManyRelation();
 		
 		this.generateFiles(tables);
 	}
@@ -65,7 +66,7 @@ public class HandleMetaData {
 		EnumSet.allOf(FileGeneratorType.class)
 				.forEach(generatorType->{
 					IGenericFileGenerator iGenericFileGenerator = FileGeneratorFactory.getFileGenerator(generatorType, tables);
-					if (iGenericFileGenerator!=null) {
+					if (iGenericFileGenerator!=null && generatorType==FileGeneratorType.Model) {
 						iGenericFileGenerator.fileGenerator();
 					}
 				});

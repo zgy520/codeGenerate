@@ -25,10 +25,13 @@ import java.io.PrintWriter;
 import java.util.Set;
 
 import com.tonfun.tools.Error.ErrorCode;
+import com.tonfun.tools.File.FileGeneratorType;
 import com.tonfun.tools.File.I.IGenericFileGenerator;
 import com.tonfun.tools.dao.util.Table;
 import com.tonfun.tools.helper.FileOperator;
 import com.tonfun.tools.helper.Utils;
+import com.tonfun.tools.helper.method.methodFactory.GenericMethodFactory;
+import com.tonfun.tools.helper.method.methodFactory.ModifyEntityFactory;
 import com.tonfun.tools.indepent.TypeConvetor.TypeConvert;
 
 /** ========================================================================================
@@ -42,7 +45,10 @@ public abstract class GenerateJavaFile implements IGenericFileGenerator {
 	protected PrintWriter printWriter;  // 输出日志文件
 	protected Table curOperateTable;  // 当前正在处理的文件所对应的表
 	private String tableName;  //表名
-	private String captureTableName;  //转化后的类名
+	private String captureTableName;  //转化后的类名中的表部分
+	private String className;  //类名
+	private final FileGeneratorType fileGeneratorType;  //当前产生的文件的类型
+	private final GenericMethodFactory methodFactory;
 	
 	/**
 	 * ========================================================================================
@@ -52,10 +58,12 @@ public abstract class GenerateJavaFile implements IGenericFileGenerator {
 	 * @param typeConvert
 	 * =======================================================================================
 	 */
-	public GenerateJavaFile(Set<Table> schemaTables,FileOperator fileOperator,TypeConvert typeConvert) {
+	public GenerateJavaFile(Set<Table> schemaTables,FileOperator fileOperator,TypeConvert typeConvert,FileGeneratorType generatorType) {
 		this.schemaTables = schemaTables;
 		this.fileOperator = fileOperator;
 		this.typeConvert = typeConvert;
+		this.fileGeneratorType = generatorType;
+		methodFactory = new ModifyEntityFactory(this.fileGeneratorType);
 	}
 
 	/** ========================================================================================
@@ -75,6 +83,10 @@ public abstract class GenerateJavaFile implements IGenericFileGenerator {
 				}
 				this.curOperateTable = table;
 				this.tableName = table.getTableName();  // 设置表名
+				// 设置以下tableName和printWriter，以供产生相应的方法
+				this.methodFactory.setTableName(this.tableName);
+				this.methodFactory.setPrintWriter(this.printWriter);
+				// 设置完毕
 				this.captureTableName = Utils.captureName(this.tableName); // 设置转换后的类名
 				//2. 产生包名
 				this.outputPacakgeName();
@@ -87,6 +99,7 @@ public abstract class GenerateJavaFile implements IGenericFileGenerator {
 				//6. 产生文件的内容
 				this.outputClassContent();
 				//7. 类文件结束符
+				
 				this.outputClassEndingOperator();
 				//8. 关闭文件写入对象
 				this.closePrintWriter();
@@ -133,6 +146,11 @@ public abstract class GenerateJavaFile implements IGenericFileGenerator {
 	 * =======================================================================================
 	 */
 	protected void outputReferencePackgaes() {
+		// 导入日志相关的包
+		if (!fileGeneratorType.equals(FileGeneratorType.DaoInterface) && !fileGeneratorType.equals(FileGeneratorType.ServiceInterface)) {
+			this.printWriter.println("import org.slf4j.Logger;\r\n" + 
+				"import org.slf4j.LoggerFactory;\r\n");
+		}
 		
 	}
 	/**
@@ -155,7 +173,12 @@ public abstract class GenerateJavaFile implements IGenericFileGenerator {
 	 * @param table
 	 * =======================================================================================
 	 */
-	protected abstract void outputClassContent();
+	protected void outputClassContent() {
+		if (!fileGeneratorType.equals(FileGeneratorType.DaoInterface) && !fileGeneratorType.equals(FileGeneratorType.ServiceInterface)) {
+			this.printWriter.println("  private static final Logger LOGGER = LoggerFactory.getLogger("+
+									this.getClassName()+".class);");
+		}		
+	}
 	/**
 	 * ========================================================================================
 	 * outputClassEndingOperator: 输出结尾符
@@ -180,4 +203,21 @@ public abstract class GenerateJavaFile implements IGenericFileGenerator {
 	protected String getCaptureTableName() {
 		return captureTableName;
 	}
+
+	protected String getClassName() {
+		return className;
+	}
+
+	protected void setClassName(String className) {
+		this.className = className;
+	}
+
+	public FileGeneratorType getFileGeneratorType() {
+		return fileGeneratorType;
+	}
+
+	public GenericMethodFactory getMethodFactory() {
+		return methodFactory;
+	}
+	
 }

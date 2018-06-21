@@ -65,7 +65,7 @@ public abstract class CCQueryDao<T,ID extends Serializable> extends CCRUDDao<T, 
 		query.setFirstResult((pagination.getPager() - 1) * pagination.getCount());
 		query.setMaxResults(pagination.getCount());		
 		List<T> tList = query.getResultList();
-		pagination.setListData(tList);
+		pagination.setListData(Collections.unmodifiableList(tList));
 		long totalRecords = getRecordsOfEntity();
 		pagination.setTotalRecords(totalRecords);			
 		return pagination;

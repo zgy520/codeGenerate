@@ -15,7 +15,7 @@ import com.tonfun.tools.indepent.TypeConvetor.TypeConvertBetweenMySQLAndJava;
 public class GenerateDaoImplFile extends GenerateJavaFile {
 
 	public GenerateDaoImplFile(Set<Table> schemaTables, FileOperator fileOperator) {
-		super(schemaTables, fileOperator, new TypeConvertBetweenMySQLAndJava());
+		super(schemaTables, fileOperator, new TypeConvertBetweenMySQLAndJava(),FileGeneratorType.DaoImpl);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -28,19 +28,20 @@ public class GenerateDaoImplFile extends GenerateJavaFile {
 	@Override
 	protected void outputClassName(String tableName) {
 		// TODO Auto-generated method stub
-		printWriter.println("public class "+this.getCaptureTableName()+
-				XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.DaoImpl,"suffix")+
+		this.setClassName(this.getCaptureTableName()+
+				XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.DaoImpl,"suffix"));
+		printWriter.println("public class "+this.getClassName()+
 				" extends SystemGenericDao<"+this.getCaptureTableName()+", Long> " + "implements "+
 				XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.DaoInterface,"prefix")
 				+ this.getCaptureTableName() +
 				XmlParserFactory.getXmlParser().xmlParser(FileGeneratorType.DaoInterface,"suffix")+" "+
-				"{\r\n");  //产生类名
+				"{");  //产生类名
 	}
 
 	@Override
 	protected void outputClassContent() {
 		// TODO Auto-generated method stub
-
+		super.outputClassContent();
 	}
 	@Override
 	protected void outputReferencePackgaes() {

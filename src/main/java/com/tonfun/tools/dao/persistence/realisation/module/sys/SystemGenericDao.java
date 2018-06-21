@@ -21,6 +21,7 @@ package com.tonfun.tools.dao.persistence.realisation.module.sys;
 
 import java.io.Serializable;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import com.tonfun.tools.dao.persistence.realisation.CCQueryDao;
@@ -31,7 +32,8 @@ import com.tonfun.tools.dao.persistence.realisation.CCQueryDao;
  * =======================================================================================*/
 public class SystemGenericDao<T,ID extends Serializable> extends CCQueryDao<T, ID> implements ISystemGenericDao<T, ID> {
 
-	@PersistenceContext
+	@PersistenceContext(name="entityManagerFactory",unitName="system")
+	@Resource(name="entityManagerFactory")
 	protected EntityManager sysManager;
 	/** ========================================================================================
 	 * getEntityManager: 
